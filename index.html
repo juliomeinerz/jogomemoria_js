@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jogo da Memória</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta charset="utf-8">
+
+</head>
+<body>
+	<div id="telaDificuldade">
+		<h1> Jogo da Memória</h1>
+		<form>			
+			<p>
+				<h2> Escolha a dificuldade: </h2>
+				<input type="radio" name="dificuldade" value="1" checked="true"> Fácil <br>
+				<input type="radio" name="dificuldade" value="2"> Médio <br>
+				<input type="radio" name="dificuldade" value="3"> Hard <br>
+			</p>
+			<br>
+			<p>
+				<h2> Escolha a categoria: </h2>
+				<input type="radio" name="categoria" value="natureza" checked="true"> Natureza <br>
+				<input type="radio" name="categoria" value="carros"> Carros <br>
+				<input type="radio" name="categoria" value="desenhos"> Desenhos animados <br>
+			</p>
+			<br>
+			<input type="button" value="Jogar" onClick="game.start(game.getDificuldade(),game.getCategoria())">
+		</form>
+	</div>
+	<div id="telaJogo">
+		
+	</div>
+	<input type="button" onClick="game.trocaTela(components.telaJogo,components.telaDificuldade), pecas.clearAll()" value="Voltar" id="buttonVoltar">	
+
+	
+	
+</body>
+<script type="text/javascript" src="script.js"></script>
+</html>
