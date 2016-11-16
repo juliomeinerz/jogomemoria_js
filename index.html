@@ -7,30 +7,30 @@
 
 </head>
 <body>
-	<div id="telaDificuldade">
+	<div id="difficultyScreen">
 		<h1> Jogo da Memória</h1>
 		<form>			
 			<p>
 				<h2> Escolha a dificuldade: </h2>
-				<input type="radio" name="dificuldade" value="1" checked="true"> Fácil <br>
-				<input type="radio" name="dificuldade" value="2"> Médio <br>
-				<input type="radio" name="dificuldade" value="3"> Hard <br>
+				<input type="radio" name="difficulty" value="1" checked="true"> Fácil <br>
+				<input type="radio" name="difficulty" value="2"> Médio <br>
+				<input type="radio" name="difficulty" value="3"> Hard <br>
 			</p>
 			<br>
 			<p>
 				<h2> Escolha a categoria: </h2>
-				<input type="radio" name="categoria" value="natureza" checked="true"> Natureza <br>
-				<input type="radio" name="categoria" value="carros"> Carros <br>
-				<input type="radio" name="categoria" value="desenhos"> Desenhos animados <br>
+				<input type="radio" name="category" value="natureza" checked="true"> Natureza <br>
+				<input type="radio" name="category" value="carros"> Carros <br>
+				<input type="radio" name="category" value="desenhos"> Desenhos animados <br>
 			</p>
 			<br>
-			<input type="button" value="Jogar" onClick="game.start(game.getDificuldade(),game.getCategoria())">
+			<input type="button" value="Jogar" onClick="game.start(game.getDifficulty(),game.getCategory())">
 		</form>
 	</div>
-	<div id="telaJogo">
+	<div id="gameScreen">
 		
 	</div>
-	<input type="button" onClick="game.trocaTela(components.telaJogo,components.telaDificuldade), pecas.clearAll()" value="Voltar" id="buttonVoltar">	
+	<input type="button" onClick="game.trocaTela(components.gameScreen,components.difficultyScreen), pieces.clearAll()" value="Voltar" id="buttonVoltar">	
 
 	
 	

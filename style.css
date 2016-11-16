@@ -2,7 +2,7 @@ body {
 	font-size:20px;
 }
 
-#telaJogo {
+#gameScreen {
 	width:50%;
 	margin:auto;
 	display:none;
@@ -17,7 +17,7 @@ body {
 	height:100%;
 	padding:0;
 }
-#telaDificuldade {
+#difficultyScreen {
 	margin:0 auto;
 	text-align:center;
 	width:60%;

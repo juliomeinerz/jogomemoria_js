@@ -1,50 +1,48 @@
-var dificuldade = null;
-var categoria = null;
+var difficulty = null;
+var category = null;
 var jogada = null;
 var previousId = null;
 var src = null;
 var tries = null;
-console.log(jogada);
 
 //INICIALIZA O JOGO
 var game = {
-	getDificuldade: function() {
-		for (var i = 0; i < components.selectDificuldade.length; i++) {
-			if(components.selectDificuldade[i].checked) {
-				dificuldade = components.selectDificuldade[i].value;
-				console.log(components.selectDificuldade[i].value);
+	getDifficulty: function() {
+		for (var i = 0; i < components.selectDifficulty.length; i++) {
+			if(components.selectDifficulty[i].checked) {
+				difficulty = components.selectDifficulty[i].value;				
 			}
 		}	
-		return dificuldade;
+		return difficulty;
 	},
-	getCategoria: function() {
-		for (var i = 0; i < components.selectCategoria.length; i++) {
-			if(components.selectCategoria[i].checked) {
-				categoria = components.selectCategoria[i].value;				
+	getCategory: function() {
+		for (var i = 0; i < components.selectCategory.length; i++) {
+			if(components.selectCategory[i].checked) {
+				category = components.selectCategory[i].value;				
 			}
 		}	
-		if (categoria == "natureza") {
-			categoria = natureza;
+		if (category == "natureza") {
+			category = natureza;
 			return natureza;
 		}
 		else {
-			if(categoria == "carros") {
-				categoria = carros;
+			if(category == "carros") {
+				category = carros;
 				return carros;
 			}
 			else {
-				categoria = desenhos;
+				category = desenhos;
 				return desenhos;
 			}
 		}
 	},
-	start: function(dificuldade,categoria) {		
+	start: function(difficulty,category) {		
 		jogada = null;
-		this.trocaTela(components.telaDificuldade,components.telaJogo);	
-		pieces.createAll(dificuldade);
+		this.trocaTela(components.difficultyScreen,components.gameScreen);	
+		pieces.createAll(difficulty);
 		enumeratePieces();
-		pieces.populateAll(categoria);		
-		pieces.hideAll(dificuldade);
+		pieces.populateAll(category);		
+		pieces.hideAll(difficulty);
 	},	
 	trocaTela: function(current,next) {
 		current.style.display = "none";
@@ -54,8 +52,6 @@ var game = {
 
 };
 //EVENTOS REFERENTES ÀS PEÇAS 
-console.log(categoria);
-
 var pieces = {	
 	hideWrong: function(pieceOne,pieceTwo) {
 		setTimeout(function() {
@@ -64,8 +60,8 @@ var pieces = {
 		},500);
 	},
 	
-	hideAll: function(dificuldade) {
-		var interval = dificuldade * 3000;
+	hideAll: function(difficulty) {
+		var interval = difficulty * 3000;
 		var hideAll = setTimeout(function() {
 			for (var i = 0; i < components.image.length; i++) {
 				components.image[i].src = defaultImage;
@@ -74,12 +70,12 @@ var pieces = {
 		}, interval);
 
 	},	
-	populateAll: function(categoria) {	
+	populateAll: function(category) {	
 			var numPieces = components.pieces.length;
 			for(var i = 0; i < numPieces; i++) {
 				var image = document.getElementById(i);
-				src = categoria.indexOf(categoria[imagensMisturadas[i]]);
-				image.src = categoria[src];				
+				src = category.indexOf(category[imagensMisturadas[i]]);
+				image.src = category[src];				
 			}	
 			disableClick();
 	},
@@ -87,39 +83,41 @@ var pieces = {
 		if (jogada == null) {
 			jogada = jogadaUsuario;
 			previousId = pieceId;
-			document.getElementById(pieceId).src = categoria[jogadaUsuario];
-			console.log(categoria[imagensMisturadas[jogadaUsuario]]);
-			console.log(jogada);
-			console.log(previousId);
+			document.getElementById(pieceId).src = category[jogadaUsuario];			
 		}
 		else {
-			console.log(jogadaUsuario);
-			document.getElementById(pieceId).src = categoria[jogadaUsuario];
+			document.getElementById(pieceId).src = category[jogadaUsuario];
 			if(jogada == jogadaUsuario) {				
 				console.log("Você acertou");
 				components.pieces[pieceId].removeAttribute("onclick");		
-				components.pieces[previousId].removeAttribute("onclick");			
+				components.pieces[previousId].removeAttribute("onclick");	
+				tries++;	
+				console.log("Tentativas: " + tries);	
 				jogada = null;
 				previousId = null;
 			}
 			else {				
 				console.log("Você errou");		
-				this.hideWrong(previousId,pieceId);		
+				this.hideWrong(previousId,pieceId);	
+				tries++;	
+				console.log("Tentativas: " + tries);
 				jogada = null;	
 				previousId = null;
 			}
 		}
+		
+			
 	},		
 
 
 
 
-	createAll: 	function(dificuldade) {
-			for (var i = 0; i < dificuldade; i++) {
+	createAll: 	function(difficulty) {
+			for (var i = 0; i < difficulty; i++) {
 				for (var j = 0; j < 12; j++) {					
 					var peca = document.createElement("div");
 					peca.className = "pieces";
-					components.telaJogo.appendChild(peca);				
+					components.gameScreen.appendChild(peca);				
 					var img = document.createElement("IMG");
 					peca.appendChild(img);
 					img.name = "piece";		
@@ -127,15 +125,15 @@ var pieces = {
 			}
 	},
 	clearAll:	function() {
-			while (components.telaJogo.firstChild) {
-				components.telaJogo.removeChild(telaJogo.firstChild);
+			while (components.gameScreen.firstChild) {
+				components.gameScreen.removeChild(gameScreen.firstChild);
 			}	
 	}
 }
 
 function enableClick() {
 	for (var i = 0; i < components.pieces.length; i++) {
-		src = categoria.indexOf(categoria[imagensMisturadas[i]]);
+		src = category.indexOf(category[imagensMisturadas[i]]);
 		components.pieces[i].setAttribute("onclick", "pieces.compare(" + i + ","+ src +")");	
 	}		
 };
@@ -221,29 +219,28 @@ var defaultImage = ['images/default.jpg'];
 var components = {
 	pieces: document.getElementsByClassName("pieces"),
 	image: document.getElementsByName("piece"),
-	telaJogo: document.getElementById("telaJogo"),
-	telaDificuldade: document.getElementById("telaDificuldade"),
-	selectDificuldade: document.getElementsByName("dificuldade"),
-	selectCategoria: document.getElementsByName("categoria"),
+	gameScreen: document.getElementById("gameScreen"),
+	difficultyScreen: document.getElementById("difficultyScreen"),
+	selectDifficulty: document.getElementsByName("difficulty"),
+	selectCategory: document.getElementsByName("category"),
 	buttonVoltar: document.getElementById("buttonVoltar")
 }
 
 function shuffle() {
 		var array = [];
-		while (array.length < ((categoria.length / 3) * dificuldade)) {
-			var random = Math.floor(Math.random() * ((categoria.length / 3) * dificuldade));
+		while (array.length < ((category.length / 3) * difficulty)) {
+			var random = Math.floor(Math.random() * ((category.length / 3) * difficulty));
 			if (array.indexOf(random) == -1) {
 				array.push(random);	
 			}				
 		}	
-		for (var i = 0; i < ((categoria.length / 3) * dificuldade); i++) {
+		for (var i = 0; i < ((category.length / 3) * difficulty); i++) {
 			array.push(array[i]);
 		}
 		for (var i = array.length; i; i--) {
         	var j = Math.floor(Math.random() * i);
        		[array[i - 1], array[j]] = [array[j], array[i - 1]];
    		}   	
-   		console.log(array);	
    		return array;
 };
 
