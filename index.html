@@ -27,10 +27,33 @@
 			<input type="button" value="Jogar" onClick="game.start(game.getDifficulty(),game.getCategory())">
 		</form>
 	</div>
-	<div id="gameScreen">
-		
+	<div id="gameScreen">	
 	</div>
-	<input type="button" onClick="game.trocaTela(components.gameScreen,components.difficultyScreen), pieces.clearAll()" value="Voltar" id="buttonVoltar">	
+	<div id="endScreen">
+		<h1>Parabéns!</h1>
+		<h3> Você completou o jogo em <span id="tries"> x </span> tentativas.</h3>
+		<h3> Qual seu nome? </h3>
+		<input type="text" name="name" id="playerName" placeholder="Nome do Jogador"> <br><br>
+		<input type="button" name="submitName" onclick="registerRecord()">
+		<input type="button" name="" value="Jogar novamente" onclick="trocaTela(components.difficultyScreen)">
+		<input type="button" name="" value="Ver recordes" onclick="trocaTela(components.scoreScreen">
+		<input type="button" name="" value="Sair do jogo" onclick="window.close()">
+	</div>
+	<div id="recordScreen">
+		<h1> Recordes </h1>
+		<table>
+			<tr>
+				<td> Nome </td>
+				<td> Categoria</td>
+				<td> Dificuldade </td>
+				<td> Jogado em </td>
+			</tr>
+		</table>
+	</div>
+	<div id="button">
+		<input type="button" onClick="trocaTela(components.difficultyScreen), pieces.clearAll()" value="Voltar ao início" id="voltar">	
+	</div>
+	
 
 	
 	

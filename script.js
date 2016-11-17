@@ -1,11 +1,16 @@
+//GLOBAIS
 var difficulty = null;
 var category = null;
+var categoryName = null;
 var jogada = null;
 var previousId = null;
 var src = null;
 var tries = null;
+var usedPieces = null;
+var mixedImages = null;
 
-//INICIALIZA O JOGO
+
+//JOGO
 var game = {
 	getDifficulty: function() {
 		for (var i = 0; i < components.selectDifficulty.length; i++) {
@@ -23,32 +28,38 @@ var game = {
 		}	
 		if (category == "natureza") {
 			category = natureza;
-			return natureza;
+			categoryName = "natureza";
+			return(natureza);
 		}
 		else {
 			if(category == "carros") {
 				category = carros;
+				categoryName = "carros";
 				return carros;
 			}
 			else {
 				category = desenhos;
+				categoryName = "desenhos";
 				return desenhos;
 			}
 		}
 	},
-	start: function(difficulty,category) {		
+	start: function(difficulty,category) {	
 		jogada = null;
-		this.trocaTela(components.difficultyScreen,components.gameScreen);	
+		tries = null;
+		mixedImages = shuffle();
+		trocaTela(components.gameScreen);		
 		pieces.createAll(difficulty);
 		enumeratePieces();
-		pieces.populateAll(category);		
+		pieces.populateAll(category);
+		clearTimeout(pieces.hideAll);		
 		pieces.hideAll(difficulty);
-	},	
-	trocaTela: function(current,next) {
-		current.style.display = "none";
-		next.style.display = "block";	
-		imagensMisturadas = shuffle();
-	},	
+		components.button.style.display = "block";
+	},		
+	end: function() {
+		components.tries.innerHTML = tries;
+		trocaTela(components.endScreen);
+	}
 
 };
 //EVENTOS REFERENTES ÀS PEÇAS 
@@ -60,13 +71,13 @@ var pieces = {
 		},500);
 	},
 	
-	hideAll: function(difficulty) {
+	hideAll: function(difficulty) {		
 		var interval = difficulty * 3000;
 		var hideAll = setTimeout(function() {
 			for (var i = 0; i < components.image.length; i++) {
 				components.image[i].src = defaultImage;
 			}	
-			enableClick();	
+			enableAllClick();	
 		}, interval);
 
 	},	
@@ -74,44 +85,47 @@ var pieces = {
 			var numPieces = components.pieces.length;
 			for(var i = 0; i < numPieces; i++) {
 				var image = document.getElementById(i);
-				src = category.indexOf(category[imagensMisturadas[i]]);
+				src = category.indexOf(category[mixedImages[i]]);
 				image.src = category[src];				
-			}	
-			disableClick();
+			}
+			disableAllClick();
 	},
 	compare: function(pieceId,jogadaUsuario) {
 		if (jogada == null) {
 			jogada = jogadaUsuario;
 			previousId = pieceId;
-			document.getElementById(pieceId).src = category[jogadaUsuario];			
+			document.getElementById(pieceId).src = category[jogadaUsuario];	
+			disableClick(pieceId);
 		}
 		else {
 			document.getElementById(pieceId).src = category[jogadaUsuario];
 			if(jogada == jogadaUsuario) {				
 				console.log("Você acertou");
-				components.pieces[pieceId].removeAttribute("onclick");		
-				components.pieces[previousId].removeAttribute("onclick");	
+				disableClick(previousId);
 				tries++;	
 				console.log("Tentativas: " + tries);	
 				jogada = null;
 				previousId = null;
+				usedPieces++;
+				if (usedPieces >= (components.pieces.length/2)) {
+					setTimeout(function() {
+						usedPieces = null;
+						game.end();
+					}, 1000);					
+				} 
 			}
 			else {				
-				console.log("Você errou");		
+				console.log("Você errou");				
 				this.hideWrong(previousId,pieceId);	
+				enableClick(pieceId);
+				enableClick(previousId);
 				tries++;	
 				console.log("Tentativas: " + tries);
 				jogada = null;	
 				previousId = null;
 			}
 		}
-		
-			
-	},		
-
-
-
-
+	},	
 	createAll: 	function(difficulty) {
 			for (var i = 0; i < difficulty; i++) {
 				for (var j = 0; j < 12; j++) {					
@@ -130,15 +144,27 @@ var pieces = {
 			}	
 	}
 }
-
-function enableClick() {
+function registerRecord() {
+	var name = components.playerName.value;	
+	alert(name);
+	alert(difficulty);
+	alert(categoryName);
+};
+function enableClick(piece) {
+	src = category.indexOf(category[mixedImages[piece]]);
+	components.pieces[piece].setAttribute("onclick", "pieces.compare("+ piece + "," +src+")");
+};
+function disableClick(piece) {
+	components.pieces[piece].removeAttribute("onclick");
+};
+function enableAllClick() {
 	for (var i = 0; i < components.pieces.length; i++) {
-		src = category.indexOf(category[imagensMisturadas[i]]);
+		src = category.indexOf(category[mixedImages[i]]);
 		components.pieces[i].setAttribute("onclick", "pieces.compare(" + i + ","+ src +")");	
 	}		
 };
 	
-function disableClick(){
+function disableAllClick(){
 	for(var i = 0; i < components.pieces.length; i++) {
 		components.pieces[i].removeAttribute("onclick");
 	}
@@ -148,6 +174,31 @@ function enumeratePieces() {
 	for (var i = 0; i < components.image.length; i++) {
 		components.image[i].id = i;
 	}
+};	
+function trocaTela(tela) {
+	if (tela == components.gameScreen) {
+		components.endScreen.style.display = "none";
+		components.difficultyScreen.style.display = "none";
+		components.gameScreen.style.display = "block";
+		components.button.style.display = "block";
+	}
+	else {
+		pieces.clearAll();
+		if (tela == components.difficultyScreen) {
+			components.endScreen.style.display = "none";
+			components.difficultyScreen.style.display = "block";
+			components.gameScreen.style.display = "none";
+			components.button.style.display = "none";
+		}
+		else if(tela == components.endScreen) {
+			components.endScreen.style.display = "block";
+			components.difficultyScreen.style.display = "none";
+			components.gameScreen.style.display = "none";
+			components.button.style.display = "none";
+		}
+		else {
+			}
+	}		
 };	
 
 
@@ -219,11 +270,16 @@ var defaultImage = ['images/default.jpg'];
 var components = {
 	pieces: document.getElementsByClassName("pieces"),
 	image: document.getElementsByName("piece"),
+	tries: document.getElementById("tries"),
+	playerName: document.getElementById("playerName"),
 	gameScreen: document.getElementById("gameScreen"),
 	difficultyScreen: document.getElementById("difficultyScreen"),
+	endScreen: document.getElementById("endScreen"),
+	recordScreen: document.getElementById("recordScreen"),
 	selectDifficulty: document.getElementsByName("difficulty"),
 	selectCategory: document.getElementsByName("category"),
-	buttonVoltar: document.getElementById("buttonVoltar")
+	voltar: document.getElementById("voltar"),
+	button:document.getElementById("button")
 }
 
 function shuffle() {
