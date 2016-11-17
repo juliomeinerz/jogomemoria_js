@@ -8,6 +8,7 @@ var src = null;
 var tries = null;
 var usedPieces = null;
 var mixedImages = null;
+var tablePlayers = [];
 
 
 //JOGO
@@ -21,7 +22,7 @@ var game = {
 		return difficulty;
 	},
 	getCategory: function() {
-		for (var i = 0; i < components.selectCategory.length; i++) {
+		for (var i in components.selectCategory) {
 			if(components.selectCategory[i].checked) {
 				category = components.selectCategory[i].value;				
 			}
@@ -74,7 +75,7 @@ var pieces = {
 	hideAll: function(difficulty) {		
 		var interval = difficulty * 3000;
 		var hideAll = setTimeout(function() {
-			for (var i = 0; i < components.image.length; i++) {
+			for (var i in components.image) {
 				components.image[i].src = defaultImage;
 			}	
 			enableAllClick();	
@@ -144,12 +145,24 @@ var pieces = {
 			}	
 	}
 }
-function registerRecord() {
+
+
+//FUNÇÕES 
+function addRecord() {
 	var name = components.playerName.value;	
-	alert(name);
-	alert(difficulty);
-	alert(categoryName);
+	var player = {
+		name: name,
+		difficulty: difficulty,
+		category: categoryName
+	};
+	tablePlayers.push(player);
+	localStorage.setItem("tablePlayers", JSON.stringify(tablePlayers));
+	showRecords();	
 };
+function showRecords() {
+	console.log(JSON.parse(localStorage.getItem("tablePlayers")));
+};
+
 function enableClick(piece) {
 	src = category.indexOf(category[mixedImages[piece]]);
 	components.pieces[piece].setAttribute("onclick", "pieces.compare("+ piece + "," +src+")");
