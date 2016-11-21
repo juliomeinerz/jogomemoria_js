@@ -3,49 +3,44 @@ body {
 }
 
 #telaJogo {
-	width:56vw;
-	margin:auto;
+	width:75%;
+	margin:0 auto;
 	margin-top:10px;
 }
 .pecas {
 	display:inline-block;
-	width:9vw;
-	height:14vh;
 	border:2px solid black;
-
+	margin: 0 auto;
 }
 .pecas img {
 	width:100%;
-	height:14vh;	
+	height:100%;	
 }
 #telaDificuldade {
 	margin:0 auto;
 	text-align:center;
 	width:56vw;
-	background-color:limegreen;
+	border:1px solid blue;
 	padding:50px;	
 	height:60vh;	
 }
-#button{
+#buttonVoltar{
 	margin-top:10px;
-	display:none;
 	margin:auto;
 	width:70px;
 }
 #telaFimJogo {
-	display:none;
 	margin:auto;
 	width:56vw;	
-	height:60vh;
-	background-color:limegreen;
+	height:60vh;	
 	padding:50px;
+	border:1px solid blue;
 }
 #telaRecordes {
-	display:none;
 	margin:auto;
-	width:56vw;
-	background-color:limegreen;
+	width:56vw;	
 	text-align:center;
+	border:1px solid blue;
 }
 .tabela {
 	margin:0 auto;
@@ -56,7 +51,7 @@ body {
 	text-align:center;
 	width:15%;
 }
-#recordes td {
+#campoRecordes td {
 	padding:10px;
 }
 .hide {

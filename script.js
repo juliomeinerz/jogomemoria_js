@@ -1,39 +1,41 @@
-//GLOBAIS
+//VARIÁVEIS GLOBAIS
 var dificuldade = null;
-var nomeDificuldade = null;
+var nomeDificuldade = '';
 var categoria = null;
-var nomeCategoria = null;
+var nomeCategoria = '';
 var jogada = null;
-var idAnterior = null;
-var caminho = null;
+var idPecaAnterior = null;
 var tentativas = null;
 var pecasUsadas = null;
-var imagensMisturadas = null;
+var imagensMisturadas = [];
 var recordes = [];
 var jogador = {};
-var telas = {
+var caminho = null;
+
+
+var componentes = { //COMPONENTES 
+	pecas: document.getElementsByClassName("pecas"),
+	imagem: document.getElementsByName("imagem"),
+	campoTentativas: document.getElementById("campoTentativas"),
+	nomeJogador: document.getElementById("nomeJogador"),
+	campoRecordes: document.getElementById("campoRecordes"),
+	selecionarDificuldade: document.getElementsByName("dificuldade"),
+	selecionarCategoria: document.getElementsByName("categoria"),
+	buttonVoltar:document.getElementById("buttonVoltar") 
+}
+var telas = { //TELAS 
 	dificuldade: document.getElementById("telaDificuldade"),
 	jogo: document.getElementById("telaJogo"),
 	fimJogo: document.getElementById("telaFimJogo"),
-	recordes: document.getElementById("telaRecordes")
+	recordes: document.getElementById("telaRecordes") 
 }
-//COMPONENTES
-var components = {
-	pecas: document.getElementsByClassName("pecas"),
-	imagem: document.getElementsByName("imagem"),
-	tentativas: document.getElementById("tentativas"),
-	nomeJogador: document.getElementById("nomeJogador"),
-	recordes: document.getElementById("recordes"),
-	selecionarDificuldade: document.getElementsByName("dificuldade"),
-	selecionarCategoria: document.getElementsByName("categoria"),
-	buttonVoltar:document.getElementById("buttonVoltar")
-}
-//JOGO
-var jogo = {
-	dificuldade: function() {
-		for (var i = 0; i < components.selecionarDificuldade.length; i++) {
-			if(components.selecionarDificuldade[i].checked) {
-				dificuldade = components.selecionarDificuldade[i].value;	
+
+
+var jogo = { //PROPRIEDADES DO JOGO 
+	dificuldade: function () {
+		for (var i = 0; i < componentes.selecionarDificuldade.length; i++) {
+			if(componentes.selecionarDificuldade[i].checked) {
+				dificuldade = componentes.selecionarDificuldade[i].value;	
 				switch(dificuldade) {
 					case "1":
 						nomeDificuldade = "Fácil";
@@ -50,10 +52,10 @@ var jogo = {
 		
 		return dificuldade;
 	},
-	categoria: function() {
-		for (var i in components.selecionarCategoria) {
-			if(components.selecionarCategoria[i].checked) {
-				categoria = components.selecionarCategoria[i].value;				
+	categoria: function () {
+		for (var i in componentes.selecionarCategoria) {
+			if(componentes.selecionarCategoria[i].checked) {
+				categoria = componentes.selecionarCategoria[i].value;				
 			}
 		}	
 		if (categoria == "natureza") {
@@ -64,7 +66,7 @@ var jogo = {
 		else {
 			if(categoria == "carros") {
 				categoria = carros;
-				nomeCategoria = "Cxarros";
+				nomeCategoria = "Carros";
 				return carros;
 			}
 			else {
@@ -74,124 +76,167 @@ var jogo = {
 			}
 		}
 	},
-	iniciar: function(dificuldade,categoria) {	
+	iniciar: function (dificuldade,categoria) {			
 		jogada = null;
 		tentativas = null;
-		imagensMisturadas = shuffle();
-		trocaTela(telas.jogo);		
-		pecas.criarTodas(dificuldade);
+		imagensMisturadas = gerarArrayImagensAleatorias();
+		trocarTela(telas.jogo);		
+		criarTodasPecas(dificuldade);
 		numerarPecas();
-		pecas.atribuirImagens(categoria);
-		clearTimeout(pecas.virarTodas);		
-		pecas.virarTodas(dificuldade);
-		components.buttonVoltar.classList.add("show");
+		atribuirImagens(categoria);
+		clearTimeout(virarTodasPecas);		
+		virarTodasPecas(dificuldade);
 	},		
-	finalizar: function() {
-		components.tentativas.innerHTML = tentativas;
-		trocaTela(tela.fimJogo);
-	}
+	finalizar: function () {
+		componentes.campoTentativas.innerHTML = tentativas;		
+		trocarTela(telas.fimJogo);
+	} 
 
 };
-//EVENTOS REFERENTES ÀS PEÇAS 
-var pecas = {	
-	hideWrong: function(pecaOne,pecaTwo) {
-		setTimeout(function() {
-			document.getElementById(pecaOne).src = defaultImage;
-			document.getElementById(pecaTwo).src = defaultImage;
-		},500);
-	},
-	
-	virarTodas: function(dificuldade) {		
-		var interval = dificuldade * 3000;
-		var virarTodas = setTimeout(function() {
-			for (var i in components.imagem) {
-				components.imagem[i].src = defaultImage;
-			}	
-			enableAllClick();	
-		}, interval);
-
-	},	
-	atribuirImagens: function(categoria) {	
-			for(var i = 0; i < components.pecas.length; i++) {
-				var image = document.getElementById(i);
-				caminho = categoria.indexOf(categoria[imagensMisturadas[i]]);
-				image.src = categoria[caminho];				
-			}
-			disableAllClick();
-	},
-	comparaJogada: function(idPeca,jogadaUsuario) {
-		if (jogada == null) {
-			jogada = jogadaUsuario;
-			idAnterior = idPeca;
-			document.getElementById(idPeca).src = categoria[jogadaUsuario];	
-			disableClick(idPeca);
-		}
-		else {
-			document.getElementById(idPeca).src = categoria[jogadaUsuario];
-			if(jogada == jogadaUsuario) {				
-				console.log("Você acertou");
-				disableClick(idAnterior);
-				tentativas++;	
-				console.log("Tentativas: " + tentativas);	
-				jogada = null;
-				idAnterior = null;
-				pecasUsadas++;
-				if (pecasUsadas >= (components.pecas.length/2)) {
-					setTimeout(function() {
-						pecasUsadas = null;
-						jogo.end();
-					}, 1000);					
-				} 
-			}
-			else {				
-				console.log("Você errou");				
-				this.hideWrong(idAnterior,idPeca);	
-				enableClick(idPeca);
-				enableClick(idAnterior);
-				tentativas++;	
-				console.log("Tentativas: " + tentativas);
-				jogada = null;	
-				idAnterior = null;
-			}
-		}
-	},	
-	criarTodas: function(dificuldade) {
-			for (var i = 0; i < dificuldade; i++) {
-				for (var j = 0; j < 12; j++) {					
-					var peca = document.createElement("div");
-					peca.className = "pecas";
-					telas.jogo.appendChild(peca);				
-					var img = document.createElement("IMG");
-					peca.appendChild(img);
-					img.name = "imagem";		
-				}			
-			}
-	},
-	limparTelaJogo:	function() {
-			while (telas.jogo.firstChild) {
-				telas.jogo.removeChild(telas.jogo.firstChild);
-			}	
-	}
-}
-
-function trocaTela(tela) {
+function trocarTela(tela) { // RECEBE A TELA A SER EXIBIDA E ESCONDE TODAS AS OUTRAS
+	limparTelaJogo();
 	for (var i in telas) {
 		telas[i].classList.add("hide");
 	}
-	if (tela != telas.jogo) {
-		components.buttonVoltar.classList.add("hide");
+	if (tela != telas.jogo && tela != telas.recordes) {
+		componentes.buttonVoltar.className = "hide";
 	}
 	else {
-		components.buttonVoltar.classList.remove("hide");
+		componentes.buttonVoltar.className = "show";
+	}	
+	tela.classList.remove("hide");	 
+};	
+function limparTelaJogo() { // LIMPA TODAS AS PEÇAS DA TELA, UTILIZADO AO SAIR DO JOGO OU TROCAR DE TELA
+	while (telas.jogo.firstChild) {
+		telas.jogo.removeChild(telas.jogo.firstChild);
+	}	 
+}
+//EVENTOS DAS JOGADAS
+function validarJogada(idPeca,jogadaUsuario) { // VALIDA SE DUAS JOGADAS SÃO IGUAIS E FAZ AS AÇÕES NECESSÁRIAS
+	if (jogada == null) {
+		jogada = jogadaUsuario;
+		idPecaAnterior = idPeca;
+		document.getElementById(idPeca).src = categoria[jogadaUsuario];	
+		desabilitarClique(idPeca);
 	}
-	tela.classList.remove("hide");	
+	else {
+		document.getElementById(idPeca).src = categoria[jogadaUsuario];
+		if(jogada == jogadaUsuario) {
+			desabilitarClique(idPecaAnterior);	
+			desabilitarClique(idPeca);							
+			pecasUsadas++;
+			tentativas++;
+			jogada = null;
+			idPecaAnterior = null;				
+			if (pecasUsadas >= (componentes.pecas.length/2)) {
+				setTimeout(function() {
+					pecasUsadas = '';
+					jogo.finalizar();
+				}, 400);					
+			} 
+		}
+		else {				
+			esconderPecasErradas(idPecaAnterior,idPeca);	
+			habilitarClique(idPeca);
+			habilitarClique(idPecaAnterior);
+			tentativas++;	
+			jogada = null;	
+			idPecaAnterior = null;
+		}
+	} 
+};
+//EVENTOS DAS PEÇAS
+function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS	
+	var alturaDinamica = 0;
+	var larguraDinamica = 0;
+	if (dificuldade == 1) {
+		telas.jogo.style.width = "62vw";
+		alturaDinamica = 30;
+		larguraDinamica = 15;
+	}
+	else {
+		if(dificuldade == 2) {
+			telas.jogo.style.width = "75vw";
+			alturaDinamica = 22;
+			larguraDinamica = 12.0;
+		}
+		else {
+			telas.jogo.style.width = "81vw";
+			alturaDinamica = 20;
+			larguraDinamica = 8.4;
+		}
+	}
+	for(var i = 0; i < componentes.pecas.length; i++) {
+		// componentes.pecas[i].setAttribute("style", 'width: " + larguraDinamica + "vw","height:" + alturaDinamica + "vh');
+		componentes.pecas[i].style.height = alturaDinamica + "vh";
+		componentes.pecas[i].style.width = larguraDinamica + "vw";
+		var image = document.getElementById(i);
+		caminho = categoria.indexOf(categoria[imagensMisturadas[i]]);
+		image.src = categoria[caminho];				
+	}
+	desabilitarCliqueTodos(); //ATRIBUI IMAGENS A CADA PEÇA CRIADA 
+};
+function esconderPecasErradas(pecaUm,pecaDois) { // ESCONDE AS PEÇAS QUE O JOGADOR ERRAR
+	setTimeout(function() {
+		document.getElementById(pecaUm).src = defaultImage;
+		document.getElementById(pecaDois).src = defaultImage;
+	},300); 
+};
+function virarTodasPecas() {	// VIRA TODAS AS PEÇAS PARA QUE SE INICIE O PROPÓSITO DO JOGO	
+	var interval = dificuldade * 3000;
+	var virarTodasPecas = setTimeout(function() {
+		for (var i in componentes.imagem) {
+			componentes.imagem[i].src = defaultImage;
+		}	
+		habilitarCliqueTodos();	
+	}, interval); //
+};
+function criarTodasPecas() { // CRIA TODAS AS PEÇAS BASEANDO-SE NA DIFICULDADE DO JOGO (12 * DIFICULDADE)
+	for (var i = 0; i < dificuldade; i++) {
+		for (var j = 0; j < 12; j++) {					
+			var peca = document.createElement("div");
+			peca.className = "pecas";
+			telas.jogo.appendChild(peca);				
+			var img = document.createElement("IMG");
+			peca.appendChild(img);
+			img.name = "imagem";		
+		}			
+	} 
+};
+function habilitarClique(peca) { // HABILITA O CLIQUE PARA UMA PEÇA
+	caminho = categoria.indexOf(categoria[imagensMisturadas[peca]]);
+	componentes.pecas[peca].setAttribute("onclick", "validarJogada("+ peca + "," +caminho+")"); 
+};
+function desabilitarClique(peca) { // DESABILITA O CLIQUE PARA UMA PEÇA
+	componentes.pecas[peca].removeAttribute("onclick");
+};
+function habilitarCliqueTodos() { // HABILITA O CLIQUE PARA TODAS AS PEÇAS
+	for (var i = 0; i < componentes.pecas.length; i++) {
+		caminho = categoria.indexOf(categoria[imagensMisturadas[i]]);
+		componentes.pecas[i].setAttribute("onclick", "validarJogada(" + i + ","+ caminho +")");	
+	}
+};
+	
+	
+function desabilitarCliqueTodos() { // DESABILITA O CLIQUE PARA TODAS AS PEÇAS
+	for(var i = 0; i < componentes.pecas.length; i++) {
+		componentes.pecas[i].removeAttribute("onclick");
+	} 
+};
+
+function numerarPecas() { // NUMERA AS PEÇAS COM UMA IDENTIFIÇÃO ÚNICA PARA EVENTOS POSTERIORES
+	for (var i = 0; i < componentes.imagem.length; i++) {
+		componentes.imagem[i].id = i;
+	} 
 };	
 
-//FUNÇÕES 
-function adicionarRecorde() {	
+
+
+//EVENTOS DOS RECORDES(ADICIONAR,MOSTRAR,GERAR) 
+function adicionarRecorde() {	// ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFICULDADE NO RANKING
 	recordes = carregarRecordes();
 	jogador = {
-		name: components.nomeJogador.value,
+		nome: componentes.nomeJogador.value,
 		pontuacao: tentativas,
 		dificuldade: nomeDificuldade,
 		categoria: nomeCategoria
@@ -201,24 +246,24 @@ function adicionarRecorde() {
 		return a.pontuacao - b.pontuacao;
 	});
 	localStorage.setItem("recordes", JSON.stringify(recordes));
+	mostrarRecordes(componentes.campoRecordes);	 
 };
-function mostrarRecordes(container) {
+function mostrarRecordes(container) {  // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
 	recordes = carregarRecordes();
 	container.innerHTML = "";
 	for (var i in recordes) {
 		var tr = document.createElement("tr");				
-		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'name'));
+		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
 		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
 		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'dificuldade'));
 		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));	
 		container.appendChild(tr);	
 	}		
 };
-function carregarRecordes() {
+function carregarRecordes() { // CARREGA TODOS OS RECORDES PARA QUE SEJAM MOSTRADOS NA TELA
 	return JSON.parse(localStorage.getItem("recordes")) || [];	
 }
-
-function gerarEstruturaRecordes(jogadorItem, propriedade) {
+function gerarEstruturaRecordes(jogadorItem, propriedade) { //GERA A ESTRUTURA PARA CADA ITEM DO RANKING
 	var td = document.createElement("td");
 	if (jogadorItem.hasOwnProperty(propriedade)) {
 		td.innerHTML =  jogadorItem[propriedade];			
@@ -226,35 +271,8 @@ function gerarEstruturaRecordes(jogadorItem, propriedade) {
 	return td;
 };
 
-function enableClick(peca) {
-	caminho = categoria.indexOf(categoria[imagensMisturadas[peca]]);
-	components.pecas[peca].setAttribute("onclick", "pecas.comparaJogada("+ peca + "," +caminho+")");
-};
-function disableClick(peca) {
-	components.pecas[peca].removeAttribute("onclick");
-};
-function enableAllClick() {
-	for (var i = 0; i < components.pecas.length; i++) {
-		caminho = categoria.indexOf(categoria[imagensMisturadas[i]]);
-		components.pecas[i].setAttribute("onclick", "pecas.comparaJogada(" + i + ","+ caminho +")");	
-	}		
-};
-	
-function disableAllClick(){
-	for(var i = 0; i < components.pecas.length; i++) {
-		components.pecas[i].removeAttribute("onclick");
-	}
-};
 
-function numerarPecas() {
-	for (var i = 0; i < components.imagem.length; i++) {
-		components.imagem[i].id = i;
-	}
-};	
-
-
-
-//ARRAYS DE POSSÍVEIS IMAGENS
+//FUNÇÕES E IMAGENS POSSÍVEIS PARA CADA CATEGORIA (NOME DA VARIÁVEL = CATEGORIA, defaultImage = IMAGEM PADRÃO AO VIRAR AS PEÇAS)
 var natureza = ['images/natureza/1.jpg',
 				'images/natureza/2.jpg',
 				'images/natureza/3.jpg',
@@ -315,12 +333,7 @@ var desenhos =  [
 			'images/desenhos/18.jpg',
 ];
 var defaultImage = ['images/default.jpg'];
-
-
-
-
-
-function shuffle() {
+function gerarArrayImagensAleatorias() {
 		var array = [];
 		while (array.length < ((categoria.length / 3) * dificuldade)) {
 			var random = Math.floor(Math.random() * ((categoria.length / 3) * dificuldade));
@@ -337,5 +350,10 @@ function shuffle() {
    		}   	
    		return array;
 };
+
+
+
+
+
 
 
