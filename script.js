@@ -146,7 +146,7 @@ function validarJogada(idPeca,jogadaUsuario) { // VALIDA SE DUAS JOGADAS SÃO IG
 	} 
 };
 //EVENTOS DAS PEÇAS
-function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS	
+function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS
 	var alturaDinamica = 0;
 	var larguraDinamica = 0;
 	if (dificuldade == 1) {
@@ -164,10 +164,9 @@ function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS
 			telas.jogo.style.width = "81vw";
 			alturaDinamica = 20;
 			larguraDinamica = 8.4;
-		}
-	}
+		}	
+	}		
 	for(var i = 0; i < componentes.pecas.length; i++) {
-		// componentes.pecas[i].setAttribute("style", 'width: " + larguraDinamica + "vw","height:" + alturaDinamica + "vh');
 		componentes.pecas[i].style.height = alturaDinamica + "vh";
 		componentes.pecas[i].style.width = larguraDinamica + "vw";
 		var image = document.getElementById(i);
