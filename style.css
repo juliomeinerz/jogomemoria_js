@@ -1,25 +1,24 @@
 body {
-	font-size:20px;
+	font-size:2.5vh;
 }
 
-#gameScreen {
+#telaJogo {
 	width:56vw;
 	margin:auto;
-	display:none;
 	margin-top:10px;
 }
-.pieces {
+.pecas {
 	display:inline-block;
 	width:9vw;
 	height:14vh;
 	border:2px solid black;
 
 }
-.pieces img {
+.pecas img {
 	width:100%;
 	height:14vh;	
 }
-#difficultyScreen {
+#telaDificuldade {
 	margin:0 auto;
 	text-align:center;
 	width:56vw;
@@ -33,7 +32,7 @@ body {
 	margin:auto;
 	width:70px;
 }
-#endScreen {
+#telaFimJogo {
 	display:none;
 	margin:auto;
 	width:56vw;	
@@ -41,11 +40,30 @@ body {
 	background-color:limegreen;
 	padding:50px;
 }
-#recordScreen {
+#telaRecordes {
 	display:none;
 	margin:auto;
 	width:56vw;
-	height:60vh;
 	background-color:limegreen;
+	text-align:center;
 }
+.tabela {
+	margin:0 auto;
+	width:100%;
+}
+.tabela td {
+	padding:10px;
+	text-align:center;
+	width:15%;
+}
+#recordes td {
+	padding:10px;
+}
+.hide {
+	display:none;
+}
+.show {
+	display:block;
+}
+
 

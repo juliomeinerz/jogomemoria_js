@@ -1,218 +1,257 @@
 //GLOBAIS
-var difficulty = null;
-var category = null;
-var categoryName = null;
+var dificuldade = null;
+var nomeDificuldade = null;
+var categoria = null;
+var nomeCategoria = null;
 var jogada = null;
-var previousId = null;
-var src = null;
-var tries = null;
-var usedPieces = null;
-var mixedImages = null;
-var tablePlayers = [];
-
-
+var idAnterior = null;
+var caminho = null;
+var tentativas = null;
+var pecasUsadas = null;
+var imagensMisturadas = null;
+var recordes = [];
+var jogador = {};
+var telas = {
+	dificuldade: document.getElementById("telaDificuldade"),
+	jogo: document.getElementById("telaJogo"),
+	fimJogo: document.getElementById("telaFimJogo"),
+	recordes: document.getElementById("telaRecordes")
+}
+//COMPONENTES
+var components = {
+	pecas: document.getElementsByClassName("pecas"),
+	imagem: document.getElementsByName("imagem"),
+	tentativas: document.getElementById("tentativas"),
+	nomeJogador: document.getElementById("nomeJogador"),
+	recordes: document.getElementById("recordes"),
+	selecionarDificuldade: document.getElementsByName("dificuldade"),
+	selecionarCategoria: document.getElementsByName("categoria"),
+	buttonVoltar:document.getElementById("buttonVoltar")
+}
 //JOGO
-var game = {
-	getDifficulty: function() {
-		for (var i = 0; i < components.selectDifficulty.length; i++) {
-			if(components.selectDifficulty[i].checked) {
-				difficulty = components.selectDifficulty[i].value;				
-			}
+var jogo = {
+	dificuldade: function() {
+		for (var i = 0; i < components.selecionarDificuldade.length; i++) {
+			if(components.selecionarDificuldade[i].checked) {
+				dificuldade = components.selecionarDificuldade[i].value;	
+				switch(dificuldade) {
+					case "1":
+						nomeDificuldade = "Fácil";
+					break;
+					case "2":
+						nomeDificuldade = "Médio";
+					break;
+					case "3":
+						nomeDificuldade = "Difícil";
+					break;
+				}			
+			}			
 		}	
-		return difficulty;
+		
+		return dificuldade;
 	},
-	getCategory: function() {
-		for (var i in components.selectCategory) {
-			if(components.selectCategory[i].checked) {
-				category = components.selectCategory[i].value;				
+	categoria: function() {
+		for (var i in components.selecionarCategoria) {
+			if(components.selecionarCategoria[i].checked) {
+				categoria = components.selecionarCategoria[i].value;				
 			}
 		}	
-		if (category == "natureza") {
-			category = natureza;
-			categoryName = "natureza";
+		if (categoria == "natureza") {
+			categoria = natureza;
+			nomeCategoria = "Natureza";
 			return(natureza);
 		}
 		else {
-			if(category == "carros") {
-				category = carros;
-				categoryName = "carros";
+			if(categoria == "carros") {
+				categoria = carros;
+				nomeCategoria = "Cxarros";
 				return carros;
 			}
 			else {
-				category = desenhos;
-				categoryName = "desenhos";
+				categoria = desenhos;
+				nomeCategoria = "Desenhos";
 				return desenhos;
 			}
 		}
 	},
-	start: function(difficulty,category) {	
+	iniciar: function(dificuldade,categoria) {	
 		jogada = null;
-		tries = null;
-		mixedImages = shuffle();
-		trocaTela(components.gameScreen);		
-		pieces.createAll(difficulty);
-		enumeratePieces();
-		pieces.populateAll(category);
-		clearTimeout(pieces.hideAll);		
-		pieces.hideAll(difficulty);
-		components.button.style.display = "block";
+		tentativas = null;
+		imagensMisturadas = shuffle();
+		trocaTela(telas.jogo);		
+		pecas.criarTodas(dificuldade);
+		numerarPecas();
+		pecas.atribuirImagens(categoria);
+		clearTimeout(pecas.virarTodas);		
+		pecas.virarTodas(dificuldade);
+		components.buttonVoltar.classList.add("show");
 	},		
-	end: function() {
-		components.tries.innerHTML = tries;
-		trocaTela(components.endScreen);
+	finalizar: function() {
+		components.tentativas.innerHTML = tentativas;
+		trocaTela(tela.fimJogo);
 	}
 
 };
 //EVENTOS REFERENTES ÀS PEÇAS 
-var pieces = {	
-	hideWrong: function(pieceOne,pieceTwo) {
+var pecas = {	
+	hideWrong: function(pecaOne,pecaTwo) {
 		setTimeout(function() {
-			document.getElementById(pieceOne).src = defaultImage;
-			document.getElementById(pieceTwo).src = defaultImage;
+			document.getElementById(pecaOne).src = defaultImage;
+			document.getElementById(pecaTwo).src = defaultImage;
 		},500);
 	},
 	
-	hideAll: function(difficulty) {		
-		var interval = difficulty * 3000;
-		var hideAll = setTimeout(function() {
-			for (var i in components.image) {
-				components.image[i].src = defaultImage;
+	virarTodas: function(dificuldade) {		
+		var interval = dificuldade * 3000;
+		var virarTodas = setTimeout(function() {
+			for (var i in components.imagem) {
+				components.imagem[i].src = defaultImage;
 			}	
 			enableAllClick();	
 		}, interval);
 
 	},	
-	populateAll: function(category) {	
-			var numPieces = components.pieces.length;
-			for(var i = 0; i < numPieces; i++) {
+	atribuirImagens: function(categoria) {	
+			for(var i = 0; i < components.pecas.length; i++) {
 				var image = document.getElementById(i);
-				src = category.indexOf(category[mixedImages[i]]);
-				image.src = category[src];				
+				caminho = categoria.indexOf(categoria[imagensMisturadas[i]]);
+				image.src = categoria[caminho];				
 			}
 			disableAllClick();
 	},
-	compare: function(pieceId,jogadaUsuario) {
+	comparaJogada: function(idPeca,jogadaUsuario) {
 		if (jogada == null) {
 			jogada = jogadaUsuario;
-			previousId = pieceId;
-			document.getElementById(pieceId).src = category[jogadaUsuario];	
-			disableClick(pieceId);
+			idAnterior = idPeca;
+			document.getElementById(idPeca).src = categoria[jogadaUsuario];	
+			disableClick(idPeca);
 		}
 		else {
-			document.getElementById(pieceId).src = category[jogadaUsuario];
+			document.getElementById(idPeca).src = categoria[jogadaUsuario];
 			if(jogada == jogadaUsuario) {				
 				console.log("Você acertou");
-				disableClick(previousId);
-				tries++;	
-				console.log("Tentativas: " + tries);	
+				disableClick(idAnterior);
+				tentativas++;	
+				console.log("Tentativas: " + tentativas);	
 				jogada = null;
-				previousId = null;
-				usedPieces++;
-				if (usedPieces >= (components.pieces.length/2)) {
+				idAnterior = null;
+				pecasUsadas++;
+				if (pecasUsadas >= (components.pecas.length/2)) {
 					setTimeout(function() {
-						usedPieces = null;
-						game.end();
+						pecasUsadas = null;
+						jogo.end();
 					}, 1000);					
 				} 
 			}
 			else {				
 				console.log("Você errou");				
-				this.hideWrong(previousId,pieceId);	
-				enableClick(pieceId);
-				enableClick(previousId);
-				tries++;	
-				console.log("Tentativas: " + tries);
+				this.hideWrong(idAnterior,idPeca);	
+				enableClick(idPeca);
+				enableClick(idAnterior);
+				tentativas++;	
+				console.log("Tentativas: " + tentativas);
 				jogada = null;	
-				previousId = null;
+				idAnterior = null;
 			}
 		}
 	},	
-	createAll: 	function(difficulty) {
-			for (var i = 0; i < difficulty; i++) {
+	criarTodas: function(dificuldade) {
+			for (var i = 0; i < dificuldade; i++) {
 				for (var j = 0; j < 12; j++) {					
 					var peca = document.createElement("div");
-					peca.className = "pieces";
-					components.gameScreen.appendChild(peca);				
+					peca.className = "pecas";
+					telas.jogo.appendChild(peca);				
 					var img = document.createElement("IMG");
 					peca.appendChild(img);
-					img.name = "piece";		
+					img.name = "imagem";		
 				}			
 			}
 	},
-	clearAll:	function() {
-			while (components.gameScreen.firstChild) {
-				components.gameScreen.removeChild(gameScreen.firstChild);
+	limparTelaJogo:	function() {
+			while (telas.jogo.firstChild) {
+				telas.jogo.removeChild(telas.jogo.firstChild);
 			}	
 	}
 }
 
+function trocaTela(tela) {
+	for (var i in telas) {
+		telas[i].classList.add("hide");
+	}
+	if (tela != telas.jogo) {
+		components.buttonVoltar.classList.add("hide");
+	}
+	else {
+		components.buttonVoltar.classList.remove("hide");
+	}
+	tela.classList.remove("hide");	
+};	
 
 //FUNÇÕES 
-function addRecord() {
-	var name = components.playerName.value;	
-	var player = {
-		name: name,
-		difficulty: difficulty,
-		category: categoryName
+function adicionarRecorde() {	
+	recordes = carregarRecordes();
+	jogador = {
+		name: components.nomeJogador.value,
+		pontuacao: tentativas,
+		dificuldade: nomeDificuldade,
+		categoria: nomeCategoria
 	};
-	tablePlayers.push(player);
-	localStorage.setItem("tablePlayers", JSON.stringify(tablePlayers));
-	showRecords();	
+	recordes.push(jogador);
+	recordes = recordes.sort(function (a, b) {
+		return a.pontuacao - b.pontuacao;
+	});
+	localStorage.setItem("recordes", JSON.stringify(recordes));
 };
-function showRecords() {
-	console.log(JSON.parse(localStorage.getItem("tablePlayers")));
+function mostrarRecordes(container) {
+	recordes = carregarRecordes();
+	container.innerHTML = "";
+	for (var i in recordes) {
+		var tr = document.createElement("tr");				
+		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'name'));
+		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
+		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'dificuldade'));
+		tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));	
+		container.appendChild(tr);	
+	}		
+};
+function carregarRecordes() {
+	return JSON.parse(localStorage.getItem("recordes")) || [];	
+}
+
+function gerarEstruturaRecordes(jogadorItem, propriedade) {
+	var td = document.createElement("td");
+	if (jogadorItem.hasOwnProperty(propriedade)) {
+		td.innerHTML =  jogadorItem[propriedade];			
+	}
+	return td;
 };
 
-function enableClick(piece) {
-	src = category.indexOf(category[mixedImages[piece]]);
-	components.pieces[piece].setAttribute("onclick", "pieces.compare("+ piece + "," +src+")");
+function enableClick(peca) {
+	caminho = categoria.indexOf(categoria[imagensMisturadas[peca]]);
+	components.pecas[peca].setAttribute("onclick", "pecas.comparaJogada("+ peca + "," +caminho+")");
 };
-function disableClick(piece) {
-	components.pieces[piece].removeAttribute("onclick");
+function disableClick(peca) {
+	components.pecas[peca].removeAttribute("onclick");
 };
 function enableAllClick() {
-	for (var i = 0; i < components.pieces.length; i++) {
-		src = category.indexOf(category[mixedImages[i]]);
-		components.pieces[i].setAttribute("onclick", "pieces.compare(" + i + ","+ src +")");	
+	for (var i = 0; i < components.pecas.length; i++) {
+		caminho = categoria.indexOf(categoria[imagensMisturadas[i]]);
+		components.pecas[i].setAttribute("onclick", "pecas.comparaJogada(" + i + ","+ caminho +")");	
 	}		
 };
 	
 function disableAllClick(){
-	for(var i = 0; i < components.pieces.length; i++) {
-		components.pieces[i].removeAttribute("onclick");
+	for(var i = 0; i < components.pecas.length; i++) {
+		components.pecas[i].removeAttribute("onclick");
 	}
 };
 
-function enumeratePieces() {
-	for (var i = 0; i < components.image.length; i++) {
-		components.image[i].id = i;
+function numerarPecas() {
+	for (var i = 0; i < components.imagem.length; i++) {
+		components.imagem[i].id = i;
 	}
 };	
-function trocaTela(tela) {
-	if (tela == components.gameScreen) {
-		components.endScreen.style.display = "none";
-		components.difficultyScreen.style.display = "none";
-		components.gameScreen.style.display = "block";
-		components.button.style.display = "block";
-	}
-	else {
-		pieces.clearAll();
-		if (tela == components.difficultyScreen) {
-			components.endScreen.style.display = "none";
-			components.difficultyScreen.style.display = "block";
-			components.gameScreen.style.display = "none";
-			components.button.style.display = "none";
-		}
-		else if(tela == components.endScreen) {
-			components.endScreen.style.display = "block";
-			components.difficultyScreen.style.display = "none";
-			components.gameScreen.style.display = "none";
-			components.button.style.display = "none";
-		}
-		else {
-			}
-	}		
-};	
+
 
 
 //ARRAYS DE POSSÍVEIS IMAGENS
@@ -279,31 +318,17 @@ var defaultImage = ['images/default.jpg'];
 
 
 
-//COMPONENTES
-var components = {
-	pieces: document.getElementsByClassName("pieces"),
-	image: document.getElementsByName("piece"),
-	tries: document.getElementById("tries"),
-	playerName: document.getElementById("playerName"),
-	gameScreen: document.getElementById("gameScreen"),
-	difficultyScreen: document.getElementById("difficultyScreen"),
-	endScreen: document.getElementById("endScreen"),
-	recordScreen: document.getElementById("recordScreen"),
-	selectDifficulty: document.getElementsByName("difficulty"),
-	selectCategory: document.getElementsByName("category"),
-	voltar: document.getElementById("voltar"),
-	button:document.getElementById("button")
-}
+
 
 function shuffle() {
 		var array = [];
-		while (array.length < ((category.length / 3) * difficulty)) {
-			var random = Math.floor(Math.random() * ((category.length / 3) * difficulty));
+		while (array.length < ((categoria.length / 3) * dificuldade)) {
+			var random = Math.floor(Math.random() * ((categoria.length / 3) * dificuldade));
 			if (array.indexOf(random) == -1) {
 				array.push(random);	
 			}				
 		}	
-		for (var i = 0; i < ((category.length / 3) * difficulty); i++) {
+		for (var i = 0; i < ((categoria.length / 3) * dificuldade); i++) {
 			array.push(array[i]);
 		}
 		for (var i = array.length; i; i--) {

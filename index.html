@@ -7,54 +7,56 @@
 
 </head>
 <body>
-	<div id="difficultyScreen">
+	<div id="telaDificuldade">
 		<h1> Jogo da Memória</h1>
 		<form>			
 			<p>
 				<h2> Escolha a dificuldade: </h2>
-				<input type="radio" name="difficulty" value="1" checked="true"> Fácil <br>
-				<input type="radio" name="difficulty" value="2"> Médio <br>
-				<input type="radio" name="difficulty" value="3"> Hard <br>
+				<input type="radio" name="dificuldade" value="1" checked="true"> Fácil <br>
+				<input type="radio" name="dificuldade" value="2"> Médio <br>
+				<input type="radio" name="dificuldade" value="3"> Hard <br>
 			</p>
 			<br>
 			<p>
 				<h2> Escolha a categoria: </h2>
-				<input type="radio" name="category" value="natureza" checked="true"> Natureza <br>
-				<input type="radio" name="category" value="carros"> Carros <br>
-				<input type="radio" name="category" value="desenhos"> Desenhos animados <br>
+				<input type="radio" name="categoria" value="natureza" checked="true"> Natureza <br>
+				<input type="radio" name="categoria" value="carros"> Carros <br>
+				<input type="radio" name="categoria" value="desenhos"> Desenhos animados <br>
 			</p>
 			<br>
-			<input type="button" value="Jogar" onClick="game.start(game.getDifficulty(),game.getCategory())">
+			<input type="button" value="Jogar" onClick="jogo.iniciar(jogo.dificuldade(),jogo.categoria())">
 		</form>
 	</div>
-	<div id="gameScreen">	
+	<div id="telaJogo">	
 	</div>
-	<div id="endScreen">
+	<div id="telaFimJogo">
 		<h1>Parabéns!</h1>
 		<h3> Você completou o jogo em <span id="tries"> x </span> tentativas.</h3>
 		<h3> Qual seu nome? </h3>
 		<input type="text" name="name" id="playerName" placeholder="Nome do Jogador"> <br><br>
-		<input type="button" name="submitName" value="Enviar" onclick="addRecord()"><br><br><br>
-		<input type="button" name="" value="Jogar novamente" onclick="trocaTela(components.difficultyScreen)">
-		<input type="button" name="" value="Ver recordes" onclick="trocaTela(components.scoreScreen">
+		<input type="button" name="submitName" value="Enviar" onclick="adicionarRecorde()"><br><br><br>
+		<input type="button" name="" value="Jogar novamente" onclick="trocaTela(telas.dificuldade)">		
 		<input type="button" name="" value="Sair do jogo" onclick="window.close()">
 	</div>
-	<div id="recordScreen">
+	<div id="telaRecordes">
+		<br>
 		<h1> Recordes </h1>
-		<table>
-			<tr>
-				<td> Nome </td>
-				<td> Categoria</td>
-				<td> Dificuldade </td>
-				<td> Jogado em </td>
+		<table class="tabela">
+			<tr> 
+				<td>Nome</td>
+				<td>Tentativas</td>
+				<td>Dificuldade</td>
+				<td>Categoria</td>
 			</tr>
 		</table>
+		<table class="tabela" id="recordes">	
+		</table>	
+		<br><br>				
+	</div>	
+	<div id="buttonVoltar">
+		<input type="button" onClick="trocaTela(telas.dificuldade), pecas.limparTelaJogo()" value="Voltar ao início">	
 	</div>
-	<div id="button">
-		<input type="button" onClick="trocaTela(components.difficultyScreen), pieces.clearAll()" value="Voltar ao início" id="voltar">	
-	</div>
-	
-
+	<input type="button" name="" value="Ver recordes" onclick="trocaTela(telas.recordes),mostrarRecordes(components.recordes)">
 	
 	
 </body>
