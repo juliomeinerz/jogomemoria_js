@@ -8,17 +8,20 @@ var idPecaSelecionadaAnterior = null;
 var tentativas = null;
 var paresIdentificados = null;
 var imagensMisturadas = [];
-var recordes = [];
+var recordesFacil = [];
+var recordesMedio = [];
+var recordesDificil = [];
 var jogador = {};
 var caminhoImagem = null;
-
 
 var componentes = { //COMPONENTES 
     pecas: document.getElementsByClassName("pecas"),
     imagem: document.getElementsByName("imagem"),
     campoTentativas: document.getElementById("campoTentativas"),
     campoNomeJogador: document.getElementById("campoNomeJogador"),
-    campoRecordes: document.getElementById("campoRecordes"),
+    campoRecordesFacil: document.getElementById("campoRecordesFacil"),
+    campoRecordesMedio: document.getElementById("campoRecordesMedio"),
+    campoRecordesDificil: document.getElementById("campoRecordesDificil"),
     selecionarDificuldade: document.getElementsByName("dificuldade"),
     selecionarCategoria: document.getElementsByName("categoria"),
     buttonVoltar: document.getElementById("buttonVoltar")
@@ -38,13 +41,13 @@ var jogo = { //PROPRIEDADES DO JOGO
                 dificuldade = componentes.selecionarDificuldade[i].value;
                 switch (dificuldade) {
                     case "1":
-                        nomeDificuldade = "Fácil";
+                        nomeDificuldade = "Facil";
                         break;
                     case "2":
-                        nomeDificuldade = "Médio";
+                        nomeDificuldade = "Medio";
                         break;
                     case "3":
-                        nomeDificuldade = "Difícil";
+                        nomeDificuldade = "Dificil";
                         break;
                 }
             }
@@ -101,8 +104,8 @@ function trocarTela(tela) { // RECEBE A TELA A SER EXIBIDA E ESCONDE TODAS AS OU
         componentes.buttonVoltar.className = "hide";
     } else {
         componentes.buttonVoltar.className = "show";
-    }
-    campoNomeJogador.value = '';
+    }  
+    campoNomeJogador.value = '';    
     tela.classList.remove("hide");
 };
 
@@ -235,7 +238,7 @@ function numerarPecas() { // NUMERA AS PEÇAS COM UMA IDENTIFIÇÃO ÚNICA PARA 
 
 //EVENTOS DOS RECORDES(ADICIONAR,MOSTRAR,GERAR) 
 function adicionarRecorde() { // ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFICULDADE NO RANKING
-    recordes = carregarRecordes();
+    recordes = carregarRecordes(nomeDificuldade);
     jogador = {
         nome: componentes.campoNomeJogador.value,
         pontuacao: tentativas,
@@ -246,25 +249,47 @@ function adicionarRecorde() { // ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFIC
     recordes = recordes.sort(function(a, b) {
         return a.pontuacao - b.pontuacao;
     });
-    localStorage.setItem("recordes", JSON.stringify(recordes));
-    mostrarRecordes(componentes.campoRecordes);
+    localStorage.setItem("recordes" + nomeDificuldade, JSON.stringify(recordes));
+    mostrarRecordesFacil(componentes.campoRecordesFacil);
+    mostrarRecordesMedio(componentes.campoRecordesMedio);
+    mostrarRecordesDificil(componentes.campoRecordesDificil);
 };
 
-function mostrarRecordes(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
-    recordes = carregarRecordes();
+function mostrarRecordesFacil(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
+    recordes = carregarRecordes("Facil");
     container.innerHTML = "";
     for (var i in recordes) {
         var tr = document.createElement("tr");
         tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
         tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'dificuldade'));
         tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
         container.appendChild(tr);
     }
 };
-
-function carregarRecordes() { // CARREGA TODOS OS RECORDES PARA QUE SEJAM MOSTRADOS NA TELA
-    return JSON.parse(localStorage.getItem("recordes")) || [];
+function mostrarRecordesMedio(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
+    recordes = carregarRecordes("Medio");
+    container.innerHTML = "";
+    for (var i in recordes) {
+        var tr = document.createElement("tr");
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
+        container.appendChild(tr);
+    }
+};
+function mostrarRecordesDificil(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
+    recordes = carregarRecordes("Dificil");
+    container.innerHTML = "";
+    for (var i in recordes) {
+        var tr = document.createElement("tr");
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
+        container.appendChild(tr);
+    }
+};
+function carregarRecordes(nomeDificuldade) { // CARREGA TODOS OS RECORDES PARA QUE SEJAM MOSTRADOS NA TELA
+    return JSON.parse(localStorage.getItem("recordes" + nomeDificuldade)) || [];
 }
 
 function gerarEstruturaRecordes(jogadorItem, propriedade) { //GERA A ESTRUTURA PARA CADA ITEM DO RANKING

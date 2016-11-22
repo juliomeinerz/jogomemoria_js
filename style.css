@@ -45,6 +45,7 @@ body {
 .tabela {
 	margin:0 auto;
 	width:100%;
+	margin-bottom:30px;
 }
 .tabela td {
 	padding:10px;
