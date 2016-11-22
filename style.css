@@ -19,26 +19,26 @@ body {
 #telaDificuldade {
 	margin:0 auto;
 	text-align:center;
-	width:56vw;
+	width:50vw;
 	border:1px solid blue;
 	padding:50px;	
-	height:60vh;	
+	height:65vh;	
 }
-#buttonVoltar{
-	margin-top:10px;
+#buttonVoltar{	
 	margin:auto;
+	margin-top:10px;
 	width:70px;
 }
 #telaFimJogo {
 	margin:auto;
-	width:56vw;	
-	height:60vh;	
+	width:50vw;	
+	height:65vh;	
 	padding:50px;
 	border:1px solid blue;
 }
 #telaRecordes {
 	margin:auto;
-	width:56vw;	
+	width:50vw;	
 	text-align:center;
 	border:1px solid blue;
 }
