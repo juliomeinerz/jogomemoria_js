@@ -14,7 +14,7 @@ var recordesDificil = [];
 var jogador = {};
 var caminhoImagem = null;
 
-var componentes = { //COMPONENTES 
+const componentes = { //COMPONENTES 
     pecas: document.getElementsByClassName("pecas"),
     imagem: document.getElementsByName("imagem"),
     campoTentativas: document.getElementById("campoTentativas"),
@@ -26,7 +26,7 @@ var componentes = { //COMPONENTES
     selecionarCategoria: document.getElementsByName("categoria"),
     buttonVoltar: document.getElementById("buttonVoltar")
 }
-var telas = { //TELAS 
+const telas = { //TELAS 
     dificuldade: document.getElementById("telaDificuldade"),
     jogo: document.getElementById("telaJogo"),
     fimJogo: document.getElementById("telaFimJogo"),
@@ -105,6 +105,9 @@ function trocarTela(tela) { // RECEBE A TELA A SER EXIBIDA E ESCONDE TODAS AS OU
     } else {
         componentes.buttonVoltar.className = "show";
     }  
+    if (tela == telas.recordes) {
+        mostrarRecordes();
+    }
     campoNomeJogador.value = '';    
     tela.classList.remove("hide");
 };
@@ -240,7 +243,7 @@ function numerarPecas() { // NUMERA AS PEÇAS COM UMA IDENTIFIÇÃO ÚNICA PARA 
 function adicionarRecorde() { // ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFICULDADE NO RANKING
     recordes = carregarRecordes(nomeDificuldade);
     jogador = {
-        nome: componentes.campoNomeJogador.value,
+        nome: componentes.campoNomeJogador.value || 'Anônimo' ,
         pontuacao: tentativas,
         dificuldade: nomeDificuldade,
         categoria: nomeCategoria
@@ -250,14 +253,19 @@ function adicionarRecorde() { // ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFIC
         return a.pontuacao - b.pontuacao;
     });
     localStorage.setItem("recordes" + nomeDificuldade, JSON.stringify(recordes));
+    mostrarRecordes();
+};
+function mostrarRecordes() { //MOSTRA TODAS AS DIFICULDADES DE UMA SÓ VEZ, CHAMANDO TODAS AS FUNÇÕES
     mostrarRecordesFacil(componentes.campoRecordesFacil);
     mostrarRecordesMedio(componentes.campoRecordesMedio);
-    mostrarRecordesDificil(componentes.campoRecordesDificil);
-};
+    mostrarRecordesDificil(componentes.campoRecordesDificil); 
+}
 
-function mostrarRecordesFacil(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
+function mostrarRecordesFacil(container) { // MOSTRA TODOS OS RECORDES DA DIFICULDADE FÁCIL CONTIDOS NOS COOKIES 
     recordes = carregarRecordes("Facil");
     container.innerHTML = "";
+    
+
     for (var i in recordes) {
         var tr = document.createElement("tr");
         tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
@@ -266,7 +274,7 @@ function mostrarRecordesFacil(container) { // MOSTRA TODOS OS RECORDES CONTIDOS 
         container.appendChild(tr);
     }
 };
-function mostrarRecordesMedio(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
+function mostrarRecordesMedio(container) { // MOSTRA TODOS OS RECORDES DA DIFICULDADE MÉDIA CONTIDOS NOS COOKIES 
     recordes = carregarRecordes("Medio");
     container.innerHTML = "";
     for (var i in recordes) {
@@ -277,7 +285,7 @@ function mostrarRecordesMedio(container) { // MOSTRA TODOS OS RECORDES CONTIDOS 
         container.appendChild(tr);
     }
 };
-function mostrarRecordesDificil(container) { // MOSTRA TODOS OS RECORDES CONTIDOS NOS COOKIES 
+function mostrarRecordesDificil(container) { // MOSTRA TODOS OS RECORDES DA DIFICULDADE DIFICIL CONTIDOS NOS COOKIES 
     recordes = carregarRecordes("Dificil");
     container.innerHTML = "";
     for (var i in recordes) {

@@ -4,28 +4,38 @@
 	<title>Jogo da Memória</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta charset="utf-8">
+	<link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
+
 
 </head>
 <body>
 	<div id="telaDificuldade">
 		<h1> Jogo da Memória</h1>
-		<form>			
-			<p>
-				<h2> Escolha a dificuldade: </h2>
-				<input type="radio" name="dificuldade" value="1" checked="true"> Fácil <br>
-				<input type="radio" name="dificuldade" value="2"> Médio <br>
-				<input type="radio" name="dificuldade" value="3"> Hard <br>
-			</p>
-			<br>
-			<p>
-				<h2> Escolha a categoria: </h2>
-				<input type="radio" name="categoria" value="natureza" checked="true"> Natureza <br>
-				<input type="radio" name="categoria" value="carros"> Carros <br>
-				<input type="radio" name="categoria" value="desenhos"> Desenhos animados <br>
-			</p>
+		<h2> Escolha a dificuldade: </h2>	
+			<div class="seletoresDificuldade">
+				<p>				
+					<input type="radio" name="dificuldade" value="1" checked="true"> Fácil <br>
+					<input type="radio" name="dificuldade" value="2"> Médio <br>
+					<input type="radio" name="dificuldade" value="3"> Difícil <br>
+				</p>	
+			</div>
+			
+			<h2> Escolha a categoria: </h2>
+			<div class="seletoresCategoria">
+				<p>				
+					<input type="radio" name="categoria" value="natureza" checked="true"> Natureza <br>
+					<input type="radio" name="categoria" value="carros"> Carros <br>
+					<input type="radio" name="categoria" value="desenhos">  Desenhos animados </span> <br>
+				</p>
+
+
+			</div>
+			
 			<br>
 			<input type="button" value="Jogar" onClick="jogo.iniciar(jogo.dificuldade(),jogo.categoria())">
-		</form>
+			<input type="button" value="Ver recordes" onClick="trocarTela(telas.recordes)">
+		
 	</div>
 	<div id="telaJogo" class="hide">	
 	</div>
@@ -48,31 +58,37 @@
 		<br>
 		<h3> Recordes - Fácil </h3>
 		<table class="tabela">
-			<tr> 
-				<td>Nome</td>
-				<td>Tentativas</td>
-				<td>Categoria</td>
-			</tr>
+			<thead> 
+				<tr>
+					<th>Nome</th>					
+					<th>Tentativas</th>
+					<th>Categoria</th>
+				</tr>
+			</thead>
 		</table>
 		<table class="tabela" id="campoRecordesFacil">	
 		</table>
 		<h3> Recordes - Médio </h3>
 		<table class="tabela">
-			<tr> 
-				<td>Nome</td>
-				<td>Tentativas</td>
-				<td>Categoria</td>
-			</tr>
+			<thead> 
+				<tr>
+					<th>Nome</th>					
+					<th>Tentativas</th>
+					<th>Categoria</th>
+				</tr>
+			</thead>
 		</table>
 		<table class="tabela" id="campoRecordesMedio">	
 		</table>
 		<h3> Recordes - Difícil </h3>
 		<table class="tabela">
-			<tr> 
-				<td>Nome</td>
-				<td>Tentativas</td>
-				<td>Categoria</td>
-			</tr>
+			<thead> 
+				<tr>
+					<th>Nome</th>					
+					<th>Tentativas</th>
+					<th>Categoria</th>
+				</tr>
+			</thead>
 		</table>
 		<table class="tabela" id="campoRecordesDificil">	
 		</table>	

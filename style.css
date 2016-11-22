@@ -1,5 +1,14 @@
+@font-face {
+	font-family:'Dosis','arial';
+	src:url('fonts/Dosis.ttf');	
+	font-family:'Bungee Shade';
+	src:url('fonts/BungeeShade-Regular.ttf');
+	
+
+}
 body {
-	font-size:2.5vh;
+	background-color:#E5F1FE;
+	font-family: 'Dosis', sans-serif;
 }
 
 #telaJogo {
@@ -16,13 +25,42 @@ body {
 	width:100%;
 	height:100%;	
 }
+.tabela {
+	margin:0 auto;
+	width:100%;
+	margin-bottom:0px;
+}
+.tabela td {
+	padding:0px;
+	text-align:center;
+	width:33%;
+}
+.tabela th {
+	padding:10px;
+	text-align:center;
+	width:33%;
+}
+.hide {
+	display:none;
+}
+.show {
+	display:block;
+}
 #telaDificuldade {
 	margin:0 auto;
 	text-align:center;
 	width:50vw;
-	border:1px solid blue;
+	/*border:1px solid blue;*/
 	padding:50px;	
-	height:65vh;	
+	height:65vh;
+}
+#telaDificuldade h1 {
+	margin-top:0px;
+	font-family: 'Bungee Shade', cursive;
+	font-size:2.2em;
+}
+#telaDificuldade p {
+	font-size:1.2em;
 }
 #buttonVoltar{	
 	margin:auto;
@@ -34,32 +72,56 @@ body {
 	width:50vw;	
 	height:65vh;	
 	padding:50px;
-	border:1px solid blue;
+	/*border:1px solid blue;*/
 }
 #telaRecordes {
 	margin:auto;
 	width:50vw;	
 	text-align:center;
-	border:1px solid blue;
+	/*border:1px solid blue;*/
 }
-.tabela {
-	margin:0 auto;
-	width:100%;
-	margin-bottom:30px;
-}
-.tabela td {
-	padding:10px;
+
+ul {
+	margin:auto;
 	text-align:center;
-	width:15%;
+	padding:0;
 }
-#campoRecordes td {
-	padding:10px;
+li {
+	display:inline-block;
+	width:30%;
+	margin:auto;
 }
-.hide {
-	display:none;
+.seletoresDificuldade {
+	width:80%;
+	height:auto;
+	margin:0 auto;
+	text-align:justify;
+	padding-left:40%;
 }
-.show {
-	display:block;
+input[type='radio'] {
+	vertical-align: middle;	
+}
+.seletoresCategoria {
+	padding-left:40%;
+	width:80%;
+	margin:0 auto;
+	text-align:justify;
+}
+input[type='button'] {
+	border-radius:10px;
+	width:auto;
+	height:30px;
+	background-color:#E5F1FE;
+	color:black;
+	border:2px solid black;
+	font-family: 'Dosis', sans-serif;
+	font-size:1em;
+	font-weight:bold;
+}
+input[type='button']:hover {
+	background-color:black;
+	color:#E5F1FE;
+	transition:0.3s;
 }
 
 
