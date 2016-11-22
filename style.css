@@ -84,19 +84,36 @@ li {
 	margin:auto;
 }
 .seletoresDificuldade {
-	width:15%;
+	width:50%;
 	height:auto;
 	margin:0 auto;
 	text-align:justify;
+	padding-left:35%;
 }
 input[type='radio'] {
 	vertical-align: middle;	
 }
 .seletoresCategoria {
-	width:30%;
-	height:auto;
+	padding-left:35%;
+	width:50%;
 	margin:0 auto;
 	text-align:justify;
+}
+input[type='button'] {
+	border-radius:10px;
+	width:auto;
+	height:30px;
+	background-color:#E5F1FE;
+	color:black;
+	border:2px solid black;
+	font-family: 'Dosis', sans-serif;
+	font-size:1em;
+	font-weight:bold;
+}
+input[type='button']:hover {
+	background-color:black;
+	color:#E5F1FE;
+	transition:0.3s;
 }
 
 
