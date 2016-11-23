@@ -155,17 +155,17 @@ function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS
     var larguraDinamica = 0;
     if (dificuldade == 1) {
         telas.jogo.style.width = "62vw";
-        alturaDinamica = 30;
+        alturaDinamica = 28;
         larguraDinamica = 15;
     } else {
         if (dificuldade == 2) {
             telas.jogo.style.width = "75vw";
-            alturaDinamica = 22;
+            alturaDinamica = 21;
             larguraDinamica = 12.0;
         } else {
             telas.jogo.style.width = "81vw";
             alturaDinamica = 20;
-            larguraDinamica = 8.4;
+            larguraDinamica = 8.6;
         }
     }
     for (var i = 0; i < componentes.pecas.length; i++) {

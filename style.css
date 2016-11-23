@@ -10,12 +10,6 @@ body {
 	background-color:#E5F1FE;
 	font-family: 'Dosis', sans-serif;
 }
-
-#telaJogo {
-	width:75%;
-	margin:0 auto;
-	margin-top:10px;
-}
 .pecas {
 	display:inline-block;
 	border:2px solid black;
@@ -52,7 +46,7 @@ body {
 	width:50vw;
 	/*border:1px solid blue;*/
 	padding:50px;	
-	height:65vh;
+	height:60%;
 }
 #telaDificuldade h1 {
 	margin-top:0px;
@@ -61,6 +55,12 @@ body {
 }
 #telaDificuldade p {
 	font-size:1.2em;
+}
+#telaJogo {
+	width:75%;
+	margin:0 auto;
+	margin-top:10px;
+	height:89vh;
 }
 #buttonVoltar{	
 	margin:auto;
@@ -109,7 +109,7 @@ input[type='radio'] {
 }
 input[type='button'] {
 	border-radius:10px;
-	width:auto;
+	width:120px;
 	height:30px;
 	background-color:#E5F1FE;
 	color:black;
@@ -117,6 +117,7 @@ input[type='button'] {
 	font-family: 'Dosis', sans-serif;
 	font-size:1em;
 	font-weight:bold;
+
 }
 input[type='button']:hover {
 	background-color:black;
