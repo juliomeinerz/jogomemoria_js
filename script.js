@@ -13,6 +13,7 @@ var recordesMedio = [];
 var recordesDificil = [];
 var jogador = {};
 var caminhoImagem = null;
+var intervalo = null;
 
 const componentes = { //COMPONENTES 
     pecas: document.getElementsByClassName("pecas"),
@@ -78,14 +79,14 @@ var jogo = { //PROPRIEDADES DO JOGO
         }
     },
     iniciar: function(dificuldade, categoria) {
-        jogada = null;
+        clearTimeout(intervalo);
+        jogada = null; 
         tentativas = null;
         imagensMisturadas = gerarArrayImagensAleatorias();
         trocarTela(telas.jogo);
         criarTodasPecas(dificuldade);
         numerarPecas();
         atribuirImagens(categoria);
-        clearTimeout(virarTodasPecas);
         virarTodasPecas(dificuldade);
     },
     finalizar: function() {
@@ -186,13 +187,12 @@ function esconderPecasErradas(pecaUm, pecaDois) { // ESCONDE AS PEÇAS QUE O JOG
 };
 
 function virarTodasPecas() { // VIRA TODAS AS PEÇAS PARA QUE SE INICIE O PROPÓSITO DO JOGO	
-    var interval = dificuldade * 3000;
-    var virarTodasPecas = setTimeout(function() {
+    intervalo = setTimeout(function() {
         for (var i in componentes.imagem) {
             componentes.imagem[i].src = defaultImage;
         }
         habilitarCliqueTodos();
-    }, interval); //
+    }, dificuldade * 3000); 
 };
 
 function criarTodasPecas() { // CRIA TODAS AS PEÇAS BASEANDO-SE NA DIFICULDADE DO JOGO (12 * DIFICULDADE)

@@ -13,29 +13,24 @@
 	<div id="telaDificuldade">
 		<h1> Jogo da Memória</h1>
 		<h2> Escolha a dificuldade: </h2>	
-			<div class="seletoresDificuldade">
-				<p>				
-					<input type="radio" name="dificuldade" value="1" checked="true"> Fácil <br>
-					<input type="radio" name="dificuldade" value="2"> Médio <br>
-					<input type="radio" name="dificuldade" value="3"> Difícil <br>
-				</p>	
-			</div>
-			
-			<h2> Escolha a categoria: </h2>
-			<div class="seletoresCategoria">
-				<p>				
-					<input type="radio" name="categoria" value="natureza" checked="true"> Natureza <br>
-					<input type="radio" name="categoria" value="carros"> Carros <br>
-					<input type="radio" name="categoria" value="desenhos">  Desenhos animados </span> <br>
-				</p>
-
-
-			</div>
-			
-			<br>
-			<input type="button" value="Jogar" onClick="jogo.iniciar(jogo.dificuldade(),jogo.categoria())">
-			<input type="button" value="Ver recordes" onClick="trocarTela(telas.recordes)">
-		
+		<div class="seletoresDificuldade">
+			<p>				
+				<input type="radio" id="dificuldade1" name="dificuldade" value="1" checked="true"> <label for="dificuldade1">Fácil </label> <br>
+				<input type="radio" id="dificuldade2" name="dificuldade" value="2"> <label for="dificuldade2">Médio </label><br>
+				<input type="radio" id="dificuldade3" name="dificuldade" value="3"> <label for="dificuldade3">Difícil </label> <br>
+			</p>	
+		</div>
+		<h2> Escolha a categoria: </h2>
+		<div class="seletoresCategoria">
+			<p>				
+				<input type="radio" id="categoria1" name="categoria" value="natureza" checked="true"> <label for="categoria1"> Natureza </label> <br>
+				<input type="radio" id="categoria2" name="categoria" value="carros"> <label for="categoria2"> Carros </label> <br>
+				<input type="radio" id="categoria3" name="categoria" value="desenhos"> <label for="categoria3"> Desenhos animados </label> </span> <br>
+			</p>
+		</div>			
+		<br>
+		<input type="button" value="Jogar" onClick="jogo.iniciar(jogo.dificuldade(),jogo.categoria())">
+		<input type="button" value="Ver recordes" onClick="trocarTela(telas.recordes)">		
 	</div>
 	<div id="telaJogo" class="hide">	
 	</div>
@@ -49,10 +44,7 @@
 		</form>
 		
 		<input type="button" name="" value="Jogar novamente" onclick="trocarTela(telas.dificuldade)">
-			<input type="button" name="" value="Sair do jogo" onclick="window.close()">
-				
-		
-		
+			<input type="button" name="" value="Sair do jogo" onclick="window.close()">	
 	</div>
 	<div id="telaRecordes" class="hide">
 		<br>

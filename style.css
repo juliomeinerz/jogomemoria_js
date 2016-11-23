@@ -117,12 +117,38 @@ input[type='button'] {
 	font-family: 'Dosis', sans-serif;
 	font-size:1em;
 	font-weight:bold;
+	margin-right:20px;
 
 }
 input[type='button']:hover {
 	background-color:black;
 	color:#E5F1FE;
 	transition:0.3s;
+}
+input[type='radio'] {
+	display:none;
+}
+label {
+	cursor:pointer;
+}
+label:before {
+	content:"";
+	display:inline-block;
+	width:16px;
+	height:16px;
+	margin-right:10px;	
+	background-color:#E5F1FE;
+	box-shadow: inset 0px 2px 2px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+	border-radius:10px;
+	vertical-align: middle;
+	border:2px solid black;
+}
+input[type=radio]:checked + label:before {
+    content: "\2022";
+    color: black;
+    font-size: 36px;
+    text-align: center;
+    line-height: 10px;
 }
 
 
