@@ -163,9 +163,9 @@ function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS
             alturaDinamica = 21;
             larguraDinamica = 12.0;
         } else {
-            telas.jogo.style.width = "81vw";
+            telas.jogo.style.width = "88vw";
             alturaDinamica = 20;
-            larguraDinamica = 8.6;
+            larguraDinamica = 9.4;
         }
     }
     for (var i = 0; i < componentes.pecas.length; i++) {
