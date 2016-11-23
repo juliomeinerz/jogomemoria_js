@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 @font-face {
 	font-family:'Dosis','arial';
 	src:url('fonts/Dosis.ttf');	
 	font-family:'Bungee Shade';
 	src:url('fonts/BungeeShade-Regular.ttf');
 	
+=======
+body {
+	background-color:#E5F1FE;
+	font-family: 'Dosis', sans-serif;
+}
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 
 }
 body {
@@ -46,7 +53,11 @@ body {
 	width:50vw;
 	/*border:1px solid blue;*/
 	padding:50px;	
+<<<<<<< HEAD
 	height:60%;
+=======
+	height:65vh;
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 }
 #telaDificuldade h1 {
 	margin-top:0px;
@@ -55,12 +66,15 @@ body {
 }
 #telaDificuldade p {
 	font-size:1.2em;
+<<<<<<< HEAD
 }
 #telaJogo {
 	width:75%;
 	margin:0 auto;
 	margin-top:10px;
 	height:89vh;
+=======
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 }
 #buttonVoltar{	
 	margin:auto;
@@ -92,24 +106,41 @@ li {
 	margin:auto;
 }
 .seletoresDificuldade {
+<<<<<<< HEAD
 	width:80%;
 	height:auto;
 	margin:0 auto;
 	text-align:justify;
 	padding-left:40%;
+=======
+	width:50%;
+	height:auto;
+	margin:0 auto;
+	text-align:justify;
+	padding-left:35%;
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 }
 input[type='radio'] {
 	vertical-align: middle;	
 }
 .seletoresCategoria {
+<<<<<<< HEAD
 	padding-left:40%;
 	width:80%;
+=======
+	padding-left:35%;
+	width:50%;
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 	margin:0 auto;
 	text-align:justify;
 }
 input[type='button'] {
 	border-radius:10px;
+<<<<<<< HEAD
 	width:120px;
+=======
+	width:auto;
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 	height:30px;
 	background-color:#E5F1FE;
 	color:black;
@@ -117,7 +148,10 @@ input[type='button'] {
 	font-family: 'Dosis', sans-serif;
 	font-size:1em;
 	font-weight:bold;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 83e6b1cf525476014656fee23c9444c06b2988f7
 }
 input[type='button']:hover {
 	background-color:black;
