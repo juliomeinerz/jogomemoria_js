@@ -1,6 +1,4 @@
 //VARIÁVEIS GLOBAIS
-var dificuldade = null;
-var nomeDificuldade = '';
 var categoria = null;
 var nomeCategoria = '';
 var jogada = null;
@@ -15,14 +13,18 @@ var jogador = {};
 var caminhoImagem = null;
 var intervalo = null;
 
+const dificuldades = [
+    {descricao: 'Fácil', codigo: 1, intervalo:3000},
+    {descricao: 'Médio', codigo:2, intervalo:6000},
+    {descricao: 'Difícil', codigo:3, intervalo:9000}
+]
+
 const componentes = { //COMPONENTES 
     pecas: document.getElementsByClassName("pecas"),
     imagem: document.getElementsByName("imagem"),
     campoTentativas: document.getElementById("campoTentativas"),
     campoNomeJogador: document.getElementById("campoNomeJogador"),
-    campoRecordesFacil: document.getElementById("campoRecordesFacil"),
-    campoRecordesMedio: document.getElementById("campoRecordesMedio"),
-    campoRecordesDificil: document.getElementById("campoRecordesDificil"),
+    campoRecordes: document.getElementsByName("campoRecordes"),
     selecionarDificuldade: document.getElementsByName("dificuldade"),
     selecionarCategoria: document.getElementsByName("categoria"),
     buttonVoltar: document.getElementById("buttonVoltar")
@@ -36,55 +38,14 @@ const telas = { //TELAS
 
 
 var jogo = { //PROPRIEDADES DO JOGO 
-    dificuldade: function() {
-        for (var i = 0; i < componentes.selecionarDificuldade.length; i++) {
-            if (componentes.selecionarDificuldade[i].checked) {
-                dificuldade = componentes.selecionarDificuldade[i].value;
-                switch (dificuldade) {
-                    case "1":
-                        nomeDificuldade = "Facil";
-                        break;
-                    case "2":
-                        nomeDificuldade = "Medio";
-                        break;
-                    case "3":
-                        nomeDificuldade = "Dificil";
-                        break;
-                }
-            }
-        }
-
-        return dificuldade;
-    },
-    categoria: function() {
-        for (var i in componentes.selecionarCategoria) {
-            if (componentes.selecionarCategoria[i].checked) {
-                categoria = componentes.selecionarCategoria[i].value;
-            }
-        }
-        if (categoria == "natureza") {
-            categoria = natureza;
-            nomeCategoria = "Natureza";
-            return (natureza);
-        } else {
-            if (categoria == "carros") {
-                categoria = carros;
-                nomeCategoria = "Carros";
-                return carros;
-            } else {
-                categoria = desenhos;
-                nomeCategoria = "Desenhos";
-                return desenhos;
-            }
-        }
-    },
+    dificuldade: {},
     iniciar: function(dificuldade, categoria) {
         clearTimeout(intervalo);
         jogada = null; 
         tentativas = null;
         imagensMisturadas = gerarArrayImagensAleatorias();
         trocarTela(telas.jogo);
-        criarTodasPecas(dificuldade);
+        criarTodasPecas(jogo.dificuldade.codigo);
         numerarPecas();
         atribuirImagens(categoria);
         virarTodasPecas(dificuldade);
@@ -95,7 +56,35 @@ var jogo = { //PROPRIEDADES DO JOGO
     }
 
 };
-
+function selecionarDificuldade () {
+    for (var i = 0; i < componentes.selecionarDificuldade.length; i++) {
+        if (componentes.selecionarDificuldade[i].checked) {
+            jogo.dificuldade = dificuldades[i];
+        }
+    }       
+}
+function selecionarCategoria () {
+    for (var i in componentes.selecionarCategoria) {
+        if (componentes.selecionarCategoria[i].checked) {
+            categoria = componentes.selecionarCategoria[i].value;
+        }
+    }
+    if (categoria == "natureza") {
+        categoria = natureza;
+        nomeCategoria = "Natureza";
+        return natureza;
+    } else {
+        if (categoria == "carros") {
+            categoria = carros;
+            nomeCategoria = "Carros";
+            return carros;
+        } else {
+            categoria = desenhos;
+            nomeCategoria = "Desenhos";
+            return desenhos;
+        }
+    }    
+}
 function trocarTela(tela) { // RECEBE A TELA A SER EXIBIDA E ESCONDE TODAS AS OUTRAS
     limparTelaJogo();
     for (var i in telas) {
@@ -107,7 +96,7 @@ function trocarTela(tela) { // RECEBE A TELA A SER EXIBIDA E ESCONDE TODAS AS OU
         componentes.buttonVoltar.className = "show";
     }  
     if (tela == telas.recordes) {
-        mostrarRecordes();
+        mostrarTodosRecordes();
     }
     campoNomeJogador.value = '';    
     tela.classList.remove("hide");
@@ -154,12 +143,12 @@ function validarJogada(idPecaSelecionada, jogadaUsuario) { // VALIDA SE DUAS JOG
 function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS
     var alturaDinamica = 0;
     var larguraDinamica = 0;
-    if (dificuldade == 1) {
+    if (jogo.dificuldade.codigo == 1) {
         telas.jogo.style.width = "62vw";
         alturaDinamica = 28;
         larguraDinamica = 15;
     } else {
-        if (dificuldade == 2) {
+        if (jogo.dificuldade.codigo == 2) {
             telas.jogo.style.width = "75vw";
             alturaDinamica = 21;
             larguraDinamica = 12.0;
@@ -192,11 +181,11 @@ function virarTodasPecas() { // VIRA TODAS AS PEÇAS PARA QUE SE INICIE O PROPÓ
             componentes.imagem[i].src = defaultImage;
         }
         habilitarCliqueTodos();
-    }, dificuldade * 3000); 
+    }, jogo.dificuldade.intervalo); 
 };
 
 function criarTodasPecas() { // CRIA TODAS AS PEÇAS BASEANDO-SE NA DIFICULDADE DO JOGO (12 * DIFICULDADE)
-    for (var i = 0; i < dificuldade; i++) {
+    for (var i = 0; i < jogo.dificuldade.codigo; i++) {
         for (var j = 0; j < 12; j++) {
             var peca = document.createElement("div");
             peca.className = "pecas";
@@ -241,65 +230,38 @@ function numerarPecas() { // NUMERA AS PEÇAS COM UMA IDENTIFIÇÃO ÚNICA PARA 
 
 //EVENTOS DOS RECORDES(ADICIONAR,MOSTRAR,GERAR) 
 function adicionarRecorde() { // ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFICULDADE NO RANKING
-    recordes = carregarRecordes(nomeDificuldade);
+    recordes = carregarRecordes(jogo.dificuldade.descricao);
     jogador = {
         nome: componentes.campoNomeJogador.value || 'Anônimo' ,
         pontuacao: tentativas,
-        dificuldade: nomeDificuldade,
+        dificuldade: jogo.dificuldade.descricao,
         categoria: nomeCategoria
     };
     recordes.push(jogador);
     recordes = recordes.sort(function(a, b) {
         return a.pontuacao - b.pontuacao;
     });
-    localStorage.setItem("recordes" + nomeDificuldade, JSON.stringify(recordes));
-    mostrarRecordes();
-};
-function mostrarRecordes() { //MOSTRA TODAS AS DIFICULDADES DE UMA SÓ VEZ, CHAMANDO TODAS AS FUNÇÕES
-    mostrarRecordesFacil(componentes.campoRecordesFacil);
-    mostrarRecordesMedio(componentes.campoRecordesMedio);
-    mostrarRecordesDificil(componentes.campoRecordesDificil); 
-}
-
-function mostrarRecordesFacil(container) { // MOSTRA TODOS OS RECORDES DA DIFICULDADE FÁCIL CONTIDOS NOS COOKIES 
-    recordes = carregarRecordes("Facil");
-    container.innerHTML = "";
-    
-
-    for (var i in recordes) {
-        var tr = document.createElement("tr");
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
-        container.appendChild(tr);
-    }
-};
-function mostrarRecordesMedio(container) { // MOSTRA TODOS OS RECORDES DA DIFICULDADE MÉDIA CONTIDOS NOS COOKIES 
-    recordes = carregarRecordes("Medio");
-    container.innerHTML = "";
-    for (var i in recordes) {
-        var tr = document.createElement("tr");
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
-        container.appendChild(tr);
-    }
-};
-function mostrarRecordesDificil(container) { // MOSTRA TODOS OS RECORDES DA DIFICULDADE DIFICIL CONTIDOS NOS COOKIES 
-    recordes = carregarRecordes("Dificil");
-    container.innerHTML = "";
-    for (var i in recordes) {
-        var tr = document.createElement("tr");
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
-        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
-        container.appendChild(tr);
-    }
+    localStorage.setItem("recordes" + jogo.dificuldade.descricao, JSON.stringify(recordes));
 };
 function carregarRecordes(nomeDificuldade) { // CARREGA TODOS OS RECORDES PARA QUE SEJAM MOSTRADOS NA TELA
     return JSON.parse(localStorage.getItem("recordes" + nomeDificuldade)) || [];
 }
-
+function mostrarRecordes(container,nomeDificuldade) { //MOSTRA TODAS AS DIFICULDADES DE UMA SÓ VEZ, CHAMANDO TODAS AS FUNÇÕES
+    recordes = carregarRecordes(nomeDificuldade);
+    container.innerHTML = "";
+    for (var i in recordes) {
+        var tr = document.createElement("tr");
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'nome'));
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'pontuacao'));
+        tr.appendChild(gerarEstruturaRecordes(recordes[i], 'categoria'));
+        container.appendChild(tr);
+    }
+}
+function mostrarTodosRecordes () {
+    mostrarRecordes(componentes.campoRecordes[0], dificuldades[0].descricao);
+    mostrarRecordes(componentes.campoRecordes[1], dificuldades[1].descricao);
+    mostrarRecordes(componentes.campoRecordes[2], dificuldades[2].descricao);
+}
 function gerarEstruturaRecordes(jogadorItem, propriedade) { //GERA A ESTRUTURA PARA CADA ITEM DO RANKING
     var td = document.createElement("td");
     if (jogadorItem.hasOwnProperty(propriedade)) {
@@ -313,13 +275,13 @@ function gerarEstruturaRecordes(jogadorItem, propriedade) { //GERA A ESTRUTURA P
 
 function gerarArrayImagensAleatorias() {
     var array = [];
-    while (array.length < ((categoria.length / 3) * dificuldade)) {
-        var random = Math.floor(Math.random() * ((categoria.length / 3) * dificuldade));
+    while (array.length < ((categoria.length / 3) * jogo.dificuldade.codigo)) {
+        var random = Math.floor(Math.random() * ((categoria.length / 3) * jogo.dificuldade.codigo));
         if (array.indexOf(random) == -1) {
             array.push(random);
         }
     }
-    for (var i = 0; i < ((categoria.length / 3) * dificuldade); i++) {
+    for (var i = 0; i < ((categoria.length / 3) * jogo.dificuldade.codigo); i++) {
         array.push(array[i]);
     }
     for (var i = array.length; i; i--) {
@@ -328,7 +290,7 @@ function gerarArrayImagensAleatorias() {
     }
     return array;
 };
-var natureza = ['images/natureza/1.jpg',
+const natureza = ['images/natureza/1.jpg',
     'images/natureza/2.jpg',
     'images/natureza/3.jpg',
     'images/natureza/4.jpg',
@@ -347,7 +309,7 @@ var natureza = ['images/natureza/1.jpg',
     'images/natureza/17.jpg',
     'images/natureza/18.jpg',
 ];
-var carros = [
+const carros = [
     'images/carros/1.jpg',
     'images/carros/2.jpg',
     'images/carros/3.jpg',
@@ -367,7 +329,7 @@ var carros = [
     'images/carros/17.jpg',
     'images/carros/18.jpg',
 ];
-var desenhos = [
+const desenhos = [
     'images/desenhos/1.jpg',
     'images/desenhos/2.jpg',
     'images/desenhos/3.jpg',

@@ -34,6 +34,16 @@ body {
 	text-align:center;
 	width:33%;
 }
+.tabela-recordes {
+	margin:0 auto;
+	width:100%;
+	margin-bottom:30px;
+}
+.tabela-recordes td {
+	padding:0px;
+	text-align:center;
+	width:33%;
+}
 .hide {
 	display:none;
 }
@@ -64,8 +74,8 @@ body {
 }
 #buttonVoltar{	
 	margin:auto;
-	margin-top:10px;
-	width:70px;
+	margin-top:5px;
+	width:120px;
 }
 #telaFimJogo {
 	margin:auto;
