@@ -10,87 +10,6 @@ body {
 	background-color:#E5F1FE;
 	font-family: 'Dosis', sans-serif;
 }
-.pecas {
-	display:inline-block;
-	border:2px solid black;
-	margin: 0 auto;
-}
-.pecas img {
-	width:100%;
-	height:100%;	
-}
-.tabela {
-	margin:0 auto;
-	width:100%;
-	margin-bottom:0px;
-}
-.tabela td {
-	padding:0px;
-	text-align:center;
-	width:33%;
-}
-.tabela th {
-	padding:10px;
-	text-align:center;
-	width:33%;
-}
-.tabela-recordes {
-	margin:0 auto;
-	width:100%;
-	margin-bottom:30px;
-}
-.tabela-recordes td {
-	padding:0px;
-	text-align:center;
-	width:33%;
-}
-.hide {
-	display:none;
-}
-.show {
-	display:block;
-}
-#telaDificuldade {
-	margin:0 auto;
-	text-align:center;
-	width:50vw;
-	/*border:1px solid blue;*/
-	padding:50px;	
-	height:60%;
-}
-#telaDificuldade h1 {
-	margin-top:0px;
-	font-family: 'Bungee Shade', cursive;
-	font-size:2.2em;
-}
-#telaDificuldade p {
-	font-size:1.2em;
-}
-#telaJogo {
-	width:75%;
-	margin:0 auto;
-	margin-top:10px;
-	height:89vh;
-}
-#buttonVoltar{	
-	margin:auto;
-	margin-top:5px;
-	width:120px;
-}
-#telaFimJogo {
-	margin:auto;
-	width:50vw;	
-	height:65vh;	
-	padding:50px;
-	/*border:1px solid blue;*/
-}
-#telaRecordes {
-	margin:auto;
-	width:50vw;	
-	text-align:center;
-	/*border:1px solid blue;*/
-}
-
 ul {
 	margin:auto;
 	text-align:center;
@@ -101,21 +20,9 @@ li {
 	width:30%;
 	margin:auto;
 }
-.seletoresDificuldade {
-	width:80%;
-	height:auto;
-	margin:0 auto;
-	text-align:justify;
-	padding-left:40%;
-}
+
 input[type='radio'] {
 	vertical-align: middle;	
-}
-.seletoresCategoria {
-	padding-left:40%;
-	width:80%;
-	margin:0 auto;
-	text-align:justify;
 }
 input[type='button'] {
 	border-radius:10px;
@@ -133,13 +40,18 @@ input[type='button'] {
 input[type='button']:hover {
 	background-color:black;
 	color:#E5F1FE;
-	transition:0.3s;
+	transition:0.2s;	
 }
 input[type='radio'] {
 	display:none;
 }
 label {
 	cursor:pointer;
+
+}
+label:hover {
+	font-weight:bold;
+	transition:0.2s;
 }
 label:before {
 	content:"";
@@ -160,5 +72,114 @@ input[type=radio]:checked + label:before {
     text-align: center;
     line-height: 10px;
 }
+input[type='text'] {
+	width:260px;
+	border:2px solid black;
+	border-radius:10px;
+	padding-left:10px;
+	background-color:#E5F1FE;
+	font-family:'Dosis',sans-serif;
+	font-size:1em;
+}
+.hide {
+	display:none;
+}
+.show {
+	display:block;
+}
+.pecas,
+.pecas-desativadas {
+	display:inline-block;
+	border:2px solid black;
+	margin: 0 auto;
+}
+.pecas img,
+.pecas-desativadas img {
+	width:100%;
+	height:100%;	
+}
+.pecas:hover {
+	-webkit-transform:scale(0.98); /* Safari and Chrome */
+    -moz-transform:scale(0.98); /* Firefox */
+    -ms-transform:scale(0.98); /* IE 9 */
+    -o-transform:scale(0.98); /* Opera */
+    transform:scale(0.98);
+    transition:0.2s;
+}
+.tabela {
+	margin:0 auto;
+	width:100%;
+	margin-bottom:0px;
+}
+.tabela th,
+.tabela td {
+	padding:0px;
+	text-align:center;
+	width:33%;
+}
+.tabela-recordes {
+	margin:0 auto;
+	width:100%;
+	margin-bottom:30px;
+}
+.tabela-recordes td {
+	padding:0px;
+	text-align:center;
+	width:33%;
+}
+.seletoresDificuldade {
+	width:80%;
+	height:auto;
+	margin:0 auto;
+	text-align:justify;
+	padding-left:40%;
+}
+.seletoresCategoria {
+	padding-left:40%;
+	width:80%;
+	margin:0 auto;
+	text-align:justify;
+}
+#telaDificuldade {
+	margin:0 auto;
+	text-align:center;
+	width:50vw;
+	padding:50px;	
+	height:60%;
+}
+#telaDificuldade h1 {
+	margin-top:0px;
+	font-family: 'Bungee Shade', cursive;
+	font-size:2.2em;
+}
+#telaDificuldade p {
+	font-size:1.2em;
+}
+#telaJogo {
+	width:75%;
+	margin:0 auto;
+	margin-top:10px;
+	height:89vh;
+}
+#botaoVoltar{	
+	margin:auto;
+	margin-top:5px;
+	width:120px;
+}
+#telaFimJogo {
+	margin:auto;
+	width:50vw;	
+	height:65vh;	
+	padding:50px;
+}
+
+
+#telaRecordes {
+	margin:auto;
+	width:50vw;	
+	text-align:center;
+}
+
+
 
 
