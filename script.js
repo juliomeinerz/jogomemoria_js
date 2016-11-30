@@ -10,13 +10,13 @@ let jogador = {};
 let caminhoImagem = null;
 let intervalo = null;
 
-const dificuldades = [
+const DIFICULDADES = [
     {descricao: 'Fácil', codigo: 1, intervalo:3000},
     {descricao: 'Médio', codigo:2, intervalo:6000},
     {descricao: 'Difícil', codigo:3, intervalo:9000}
 ]
 
-const componentes = { //COMPONENTES 
+const COMPONENTES = { 
     pecas: document.getElementsByClassName("pecas"),
     imagem: document.getElementsByName("imagem"),
     campoTentativas: document.getElementById("campoTentativas"),
@@ -26,227 +26,210 @@ const componentes = { //COMPONENTES
     selecionarCategoria: document.getElementsByName("categoria"),
     botaoVoltar: document.getElementById("botaoVoltar")
 }
-const telas = { //TELAS 
+const TELAS = { 
     dificuldade: document.getElementById("telaDificuldade"),
     jogo: document.getElementById("telaJogo"),
     fimJogo: document.getElementById("telaFimJogo"),
     recordes: document.getElementById("telaRecordes")
 }
-
-
-const jogo = { //PROPRIEDADES DO JOGO 
+const JOGO = { 
     dificuldade: {},
     iniciar: function(dificuldade, categoria) {
         clearTimeout(intervalo);
-        zerarJogada();
-        zerarTentativas();
+        this.zerarJogada();
+        this.zerarTentativas();
         imagensMisturadas = gerarArrayImagensAleatorias();
-        trocarTela(telas.jogo);
-        criarTodasPecas(jogo.dificuldade.codigo);
-        numerarPecas();
-        atribuirImagens(categoria);
-        virarTodasPecas(dificuldade);
+        trocarTela(TELAS.jogo);
+        pecas.criarTodas(JOGO.dificuldade.codigo);
+        pecas.numerar();
+        pecas.atribuirImagens(categoria);
+        pecas.virarTodas(dificuldade);
+        pecas.atribuirImagens(categoria);
     },
     finalizar: function() {
-        componentes.campoTentativas.innerHTML = tentativas;
-        trocarTela(telas.fimJogo);
-    }
-
+        COMPONENTES.campoTentativas.innerHTML = tentativas;
+        trocarTela(TELAS.fimJogo);
+    },
+    zerarJogada: function () {
+        jogada = null;
+    },    
+    zerarTentativas: function() {
+         tentativas = null;
+    },
 };
 function selecionarDificuldade () {
-    for (let i in componentes.selecionarDificuldade) {
-        if (componentes.selecionarDificuldade[i].checked) {
-            jogo.dificuldade = dificuldades[i];
+    for (let i in COMPONENTES.selecionarDificuldade) {
+        if (COMPONENTES.selecionarDificuldade[i].checked) {
+            JOGO.dificuldade = DIFICULDADES[i];
         }
     }   
 }
 function selecionarCategoria () {
-    for (let i in componentes.selecionarCategoria) {
-        if (componentes.selecionarCategoria[i].checked) {
-            categoria = componentes.selecionarCategoria[i].value;
+    for (let i in COMPONENTES.selecionarCategoria) {
+        if (COMPONENTES.selecionarCategoria[i].checked) {
+            categoria = COMPONENTES.selecionarCategoria[i].value;
         }
     }
     if (categoria == "natureza") {
-        categoria = natureza;
+        categoria = NATUREZA;
         nomeCategoria = "Natureza";
-        return natureza;
+        return NATUREZA;
     } else {
         if (categoria == "carros") {
-            categoria = carros;
+            categoria = CARROS;
             nomeCategoria = "Carros";
-            return carros;
+            return CARROS;
         } else {
-            categoria = desenhos;
+            categoria = DESENHOS;
             nomeCategoria = "Desenhos";
-            return desenhos;
+            return DESENHOS;
         }
     }    
-}
-function trocarTela(tela) { // RECEBE A TELA A SER EXIBIDA E ESCONDE TODAS AS OUTRAS
+}   
+function trocarTela(tela) { 
     limparTelaJogo();
     campoNomeJogador.value = '';  
-    for (let i in telas) {
-        telas[i].classList.add("hide");
+    for (let i in TELAS) {
+        TELAS[i].classList.add("hide");
     }
-    if (tela != telas.jogo && tela != telas.recordes) {
-        componentes.botaoVoltar.className = "hide";
+    if (tela != TELAS.jogo && tela != TELAS.recordes) {
+        COMPONENTES.botaoVoltar.className = "hide";
     } 
     else {
-        componentes.botaoVoltar.className = "show";
+        COMPONENTES.botaoVoltar.className = "show";
     }  
-    if (tela == telas.recordes) mostrarTodosRecordes();     
+    if (tela == TELAS.recordes) mostrarTodosRecordes();     
     tela.classList.remove("hide");
-
 };
-
-function limparTelaJogo() { // LIMPA TODAS AS PEÇAS DA TELA, UTILIZADO AO SAIR DO JOGO OU TROCAR DE TELA
-    while (telas.jogo.firstChild) {
-        telas.jogo.removeChild(telas.jogo.firstChild);
+function limparTelaJogo() { 
+    while (TELAS.jogo.firstChild) {
+        TELAS.jogo.removeChild(TELAS.jogo.firstChild);
     }
 }
-//EVENTOS DAS JOGADAS
-function validarJogada(idPecaSelecionada, jogadaUsuario) { // VALIDA SE DUAS JOGADAS SÃO IGUAIS E FAZ AS AÇÕES NECESSÁRIAS
+function validarJogada(idPecaSelecionada, jogadaUsuario) { 
    if (jogada == null) {
         jogada = jogadaUsuario;
         idPecaSelecionadaAnterior = idPecaSelecionada;
         document.getElementById(idPecaSelecionada).src = categoria[jogadaUsuario];
-        desabilitarClique(idPecaSelecionada);
+        pecas.desabilitarClique(idPecaSelecionada);
     } else {
         document.getElementById(idPecaSelecionada).src = categoria[jogadaUsuario];
         if (jogada == jogadaUsuario) {
-            desabilitarClique(idPecaSelecionadaAnterior);
-            desabilitarClique(idPecaSelecionada);
+            pecas.desabilitarClique(idPecaSelecionadaAnterior);
+            pecas.desabilitarClique(idPecaSelecionada);
             paresIdentificados++;
             tentativas++;
-            zerarJogada();
+            JOGO.zerarJogada();
             idPecaSelecionadaAnterior = null;
-            if (paresIdentificados >= (componentes.pecas.length / 2)) {
+            if (paresIdentificados >= (COMPONENTES.pecas.length / 2)) {
                 setTimeout(function() {
                     paresIdentificados = '';
-                    jogo.finalizar();
+                    JOGO.finalizar();
                 }, 400);
             }
         } else {
-            esconderPecasErradas(idPecaSelecionadaAnterior, idPecaSelecionada);
-            habilitarClique(idPecaSelecionada);
-            habilitarClique(idPecaSelecionadaAnterior);
+            pecas.esconderErradas(idPecaSelecionadaAnterior, idPecaSelecionada);
+            pecas.habilitarClique(idPecaSelecionada);
+            pecas.habilitarClique(idPecaSelecionadaAnterior);
             tentativas++;
-            zerarJogada();
+            JOGO.zerarJogada();
             idPecaSelecionadaAnterior = null;
         }
     }
-
 };
-//EVENTOS DAS PEÇAS
-function atribuirImagens() { // ATRIBUI IMAGENS ÁS PEÇAS GERADAS
-    let alturaDinamica = 0;
-    let larguraDinamica = 0;
-    if (jogo.dificuldade.codigo == 1) {
-        telas.jogo.style.width = "62vw";
-        alturaDinamica = 28;
-        larguraDinamica = 15;
-    } else {
-        if (jogo.dificuldade.codigo == 2) {
-            telas.jogo.style.width = "75vw";
-            alturaDinamica = 21;
-            larguraDinamica = 12.0;
+const pecas =  {
+    atribuirImagens: function(categoria)  {
+        let alturaDinamica = 0;
+        let larguraDinamica = 0;
+        if (JOGO.dificuldade.codigo == 1) {
+            TELAS.jogo.style.width = "62vw";
+            alturaDinamica = 28;
+            larguraDinamica = 15;
         } else {
-            telas.jogo.style.width = "88vw";
-            alturaDinamica = 20;
-            larguraDinamica = 9.4;
+            if (JOGO.dificuldade.codigo == 2) {
+                TELAS.jogo.style.width = "75vw";
+                alturaDinamica = 21;
+                larguraDinamica = 12.0;
+            } else {
+                TELAS.jogo.style.width = "88vw";
+                alturaDinamica = 20;
+                larguraDinamica = 9.4;
+            }
         }
-    }
-    for (let i = 0; i < componentes.pecas.length; i++) {
-        componentes.pecas[i].style.height = alturaDinamica + "vh";
-        componentes.pecas[i].style.width = larguraDinamica + "vw";
-        let image = document.getElementById(i);
-        caminhoImagem = categoria.indexOf(categoria[imagensMisturadas[i]]);
-        image.src = categoria[caminhoImagem];
-    }
-    desabilitarCliqueTodos(); 
-};
-
-function esconderPecasErradas(pecaUm, pecaDois) { // ESCONDE AS PEÇAS QUE O JOGADOR ERRAR
-    setTimeout(function() {
-        document.getElementById(pecaUm).src = defaultImage;
-        document.getElementById(pecaDois).src = defaultImage;
-    }, 300);
-};
-
-function virarTodasPecas() { // VIRA TODAS AS PEÇAS PARA QUE SE INICIE O PROPÓSITO DO JOGO	
-    intervalo = setTimeout(function() {
-        for (let i in componentes.imagem) {
-            componentes.imagem[i].src = defaultImage;
+        for (let i = 0; i < COMPONENTES.pecas.length; i++) {
+            COMPONENTES.pecas[i].style.height = alturaDinamica + "vh";
+            COMPONENTES.pecas[i].style.width = larguraDinamica + "vw";
+            let image = document.getElementById(i);
+            caminhoImagem = categoria.indexOf(categoria[imagensMisturadas[i]]);
+            image.src = categoria[caminhoImagem];
         }
-        habilitarCliqueTodos();
-    }, jogo.dificuldade.intervalo); 
-};
-
-function criarTodasPecas() { // CRIA TODAS AS PEÇAS BASEANDO-SE NA DIFICULDADE DO JOGO (12 * DIFICULDADE)
-    for (let i = 0; i < jogo.dificuldade.codigo; i++) {
-        for (let j = 0; j < 12; j++) {
-            let peca = document.createElement("div");
-            peca.className = "pecas";
-            telas.jogo.appendChild(peca);
-            let img = document.createElement("IMG");
-            peca.appendChild(img);
-            img.name = "imagem";
+        pecas.desabilitarCliqueTodas();    
+    },
+    esconderErradas: function(pecaUm, pecaDois) { 
+        setTimeout(function() {
+            document.getElementById(pecaUm).src = IMAGEMPADRAO;
+            document.getElementById(pecaDois).src = IMAGEMPADRAO;
+        }, 300);
+    },
+    virarTodas: function() { 
+        intervalo = setTimeout(function() {
+            for (let i in COMPONENTES.imagem) {
+                COMPONENTES.imagem[i].src = IMAGEMPADRAO;
+            }
+            pecas.habilitarCliqueTodas();
+        }, JOGO.dificuldade.intervalo); 
+    },
+    criarTodas: function() { // Cria todas as peças baseando-se na dificuldade do jogo (dificuldade * 12)
+        for (let i = 0; i < JOGO.dificuldade.codigo; i++) {
+            for (let j = 0; j < 12; j++) {
+                let peca = document.createElement("div");
+                peca.className = "pecas";
+                TELAS.jogo.appendChild(peca);
+                let img = document.createElement("IMG");
+                peca.appendChild(img);
+                img.name = "imagem";
+            }
         }
-    }
+    },
+    habilitarClique: function(peca) { 
+        caminhoImagem = categoria.indexOf(categoria[imagensMisturadas[peca]]);
+        COMPONENTES.pecas[peca].setAttribute("onclick", "validarJogada(" + peca + "," + caminhoImagem + ")");
+    },
+
+    desabilitarClique: function(peca) {
+        COMPONENTES.pecas[peca].removeAttribute("onclick");    
+    },
+
+    habilitarCliqueTodas: function() { 
+        for (let i = 0; i < COMPONENTES.pecas.length; i++) {
+            caminhoImagem = categoria.indexOf(categoria[imagensMisturadas[i]]);
+            COMPONENTES.pecas[i].setAttribute("onclick", "validarJogada(" + i + "," + caminhoImagem + ")");
+        }
+    },
+    desabilitarCliqueTodas: function() { 
+        for (let i = 0; i < COMPONENTES.pecas.length; i++) {
+            COMPONENTES.pecas[i].removeAttribute("onclick");
+        }
+    },
+    numerar: function() { // Numera todas as peças com um ID único, para eventos posteriores
+        for (let i = 0; i < COMPONENTES.imagem.length; i++) {
+            COMPONENTES.imagem[i].id = i;
+        }
+    },
 };
-
-
-function habilitarClique(peca) { // HABILITA O CLIQUE PARA UMA PEÇA
-    caminhoImagem = categoria.indexOf(categoria[imagensMisturadas[peca]]);
-    componentes.pecas[peca].setAttribute("onclick", "validarJogada(" + peca + "," + caminhoImagem + ")");
-};
-
-function desabilitarClique(peca) { // DESABILITA O CLIQUE PARA UMA PEÇA
-    componentes.pecas[peca].removeAttribute("onclick");    
-};
-
-function habilitarCliqueTodos() { // HABILITA O CLIQUE PARA TODAS AS PEÇAS
-    for (let i = 0; i < componentes.pecas.length; i++) {
-        caminhoImagem = categoria.indexOf(categoria[imagensMisturadas[i]]);
-        componentes.pecas[i].setAttribute("onclick", "validarJogada(" + i + "," + caminhoImagem + ")");
-    }
-};
-
-
-function desabilitarCliqueTodos() { // DESABILITA O CLIQUE PARA TODAS AS PEÇAS
-    for (let i = 0; i < componentes.pecas.length; i++) {
-        componentes.pecas[i].removeAttribute("onclick");
-    }
-};
-
-function numerarPecas() { // NUMERA AS PEÇAS COM UMA IDENTIFIÇÃO ÚNICA PARA EVENTOS POSTERIORES
-    for (let i = 0; i < componentes.imagem.length; i++) {
-        componentes.imagem[i].id = i;
-    }
-};
-function zerarJogada() {
-    jogada = null;
-};
-function zerarTentativas() {
-    tentativas = null;
-};
-
-
-
-//EVENTOS DOS RECORDES(ADICIONAR,MOSTRAR,GERAR) 
 function adicionarRecorde() { // ADICIONA O NOME, PONTUAÇÃO, CATEGORIA E DIFICULDADE NO RANKING
-    recordes = carregarRecordes(jogo.dificuldade.descricao);
+    recordes = carregarRecordes(JOGO.dificuldade.descricao);
     jogador = {
-        nome: componentes.campoNomeJogador.value || 'Anônimo' ,
+        nome: COMPONENTES.campoNomeJogador.value || 'Anônimo' ,
         pontuacao: tentativas,
-        dificuldade: jogo.dificuldade.descricao,
+        dificuldade: JOGO.dificuldade.descricao,
         categoria: nomeCategoria
     };
     recordes.push(jogador);
     recordes = recordes.sort(function(a, b) {
         return a.pontuacao - b.pontuacao;
     });
-    localStorage.setItem("recordes" + jogo.dificuldade.descricao, JSON.stringify(recordes));
+    localStorage.setItem("recordes" + JOGO.dificuldade.descricao, JSON.stringify(recordes));
 };
 function carregarRecordes(nomeDificuldade) { // CARREGA TODOS OS RECORDES PARA QUE SEJAM MOSTRADOS NA TELA
     return JSON.parse(localStorage.getItem("recordes" + nomeDificuldade)) || [];
@@ -263,9 +246,9 @@ function mostrarRecordes(container,nomeDificuldade) { //MOSTRA TODAS AS DIFICULD
     }
 }
 function mostrarTodosRecordes () {
-    mostrarRecordes(componentes.campoRecordes[0], dificuldades[0].descricao);
-    mostrarRecordes(componentes.campoRecordes[1], dificuldades[1].descricao);
-    mostrarRecordes(componentes.campoRecordes[2], dificuldades[2].descricao);
+    mostrarRecordes(COMPONENTES.campoRecordes[0], DIFICULDADES[0].descricao);
+    mostrarRecordes(COMPONENTES.campoRecordes[1], DIFICULDADES[1].descricao);
+    mostrarRecordes(COMPONENTES.campoRecordes[2], DIFICULDADES[2].descricao);
 }
 function gerarEstruturaRecordes(jogadorItem, propriedade) { //GERA A ESTRUTURA PARA CADA ITEM DO RANKING
     let td = document.createElement("td");
@@ -274,19 +257,15 @@ function gerarEstruturaRecordes(jogadorItem, propriedade) { //GERA A ESTRUTURA P
     }
     return td;
 };
-
-
-//FUNÇÕES E IMAGENS POSSÍVEIS PARA CADA CATEGORIA (NOME DA constIÁVEL = CATEGORIA, defaultImage = IMAGEM PADRÃO AO VIRAR AS PEÇAS)
-
 function gerarArrayImagensAleatorias() {
     const array = [];
-    while (array.length < ((categoria.length / 3) * jogo.dificuldade.codigo)) {
-        const random = Math.floor(Math.random() * ((categoria.length / 3) * jogo.dificuldade.codigo));
+    while (array.length < ((categoria.length / 3) * JOGO.dificuldade.codigo)) {
+        const random = Math.floor(Math.random() * ((categoria.length / 3) * JOGO.dificuldade.codigo));
         if (array.indexOf(random) == -1) {
             array.push(random);
         }
     }
-    for (let i = 0; i < ((categoria.length / 3) * jogo.dificuldade.codigo); i++) {
+    for (let i = 0; i < ((categoria.length / 3) * JOGO.dificuldade.codigo); i++) {
         array.push(array[i]);
     }
     for (let i = array.length; i; i--) {
@@ -295,7 +274,7 @@ function gerarArrayImagensAleatorias() {
     }
     return array;
 };
-const natureza = ['images/natureza/1.jpg',
+const NATUREZA = ['images/natureza/1.jpg',
     'images/natureza/2.jpg',
     'images/natureza/3.jpg',
     'images/natureza/4.jpg',
@@ -314,7 +293,7 @@ const natureza = ['images/natureza/1.jpg',
     'images/natureza/17.jpg',
     'images/natureza/18.jpg',
 ];
-const carros = [
+const CARROS = [
     'images/carros/1.jpg',
     'images/carros/2.jpg',
     'images/carros/3.jpg',
@@ -334,7 +313,7 @@ const carros = [
     'images/carros/17.jpg',
     'images/carros/18.jpg',
 ];
-const desenhos = [
+const DESENHOS = [
     'images/desenhos/1.jpg',
     'images/desenhos/2.jpg',
     'images/desenhos/3.jpg',
@@ -354,4 +333,4 @@ const desenhos = [
     'images/desenhos/17.jpg',
     'images/desenhos/18.jpg',
 ];
-const defaultImage = ['images/default.jpg'];
+const IMAGEMPADRAO = ['images/default.jpg'];

@@ -29,8 +29,8 @@
 			</p>
 		</div>			
 		<br>
-		<input type="button" value="Jogar" onClick="jogo.iniciar(selecionarDificuldade(),selecionarCategoria())">
-		<input type="button" value="Ver recordes" onClick="trocarTela(telas.recordes)">		
+		<input type="button" value="Jogar" onClick="JOGO.iniciar(selecionarDificuldade(),selecionarCategoria())">
+		<input type="button" value="Ver recordes" onClick="trocarTela(TELAS.recordes)">		
 	</div>
 	<div id="telaJogo" class="hide">	
 	</div>
@@ -40,11 +40,11 @@
 		<h3> Qual seu nome? </h3>
 		<form action="#"> 
 			<input type="text" name="name" id="campoNomeJogador" placeholder="Nome do Jogador"> <br><br>
-			<input type="button" name="submitName" value="Registrar" onclick="adicionarRecorde(),trocarTela(telas.recordes)"><br><br><br>
+			<input type="button" name="submitName" value="Registrar" onclick="adicionarRecorde(),trocarTela(TELAS.recordes)"><br><br><br>
 		</form>
 		
-		<input type="button" name="" value="Jogar novamente" onclick="trocarTela(telas.dificuldade)">
-			<input type="button" name="" value="Sair do jogo" onclick="window.close()">	
+		<input type="button" name="" value="Jogar novamente" onclick="trocarTela(TELAS.dificuldade)">
+			<input type="button" name="" value="Sair do Jogo" onclick="window.close()">	
 	</div>
 	<div id="telaRecordes" class="hide">
 		<hr>
@@ -95,7 +95,7 @@
 						
 	</div>		
 	<div class="hide" id="botaoVoltar">
-		<input type="button" onClick="trocarTela(telas.dificuldade)" value="Voltar ao início">	
+		<input type="button" onClick="trocarTela(TELAS.dificuldade)" value="Voltar ao início">	
 	</div>	
 </body>
 <script type="text/javascript" src="script.js"></script>
